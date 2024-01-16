@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Pardalsalcap\Hailo\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class HailoCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'hailo';
 
     public $description = 'My command';
 
