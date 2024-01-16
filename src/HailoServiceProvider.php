@@ -2,9 +2,9 @@
 
 namespace Pardalsalcap\Hailo;
 
+use Pardalsalcap\Hailo\Commands\HailoCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Pardalsalcap\Hailo\Commands\HailoCommand;
 
 class HailoServiceProvider extends PackageServiceProvider
 {
