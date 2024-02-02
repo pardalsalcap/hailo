@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+button.primary {
+    @apply rounded-md bg-hailo-400
+    px-3.5 py-2.5
+    text-sm font-semibold text-white
+    shadow-sm
+    hover:bg-hailo-600
+    focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600
+    uppercase
+        font-bold
+    ;
+}
+
+button.secondary {
+    @apply rounded-md bg-gray-400
+    px-3.5 py-2.5
+    text-sm font-semibold text-white
+    shadow-sm
+    hover:bg-black
+    focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600
+    uppercase
+        font-bold
+    ;
+}
+/******************************************************
+ *  SweetAlert2
+ ******************************************************/
+.toast-success
+{
+    @apply bg-lime-500 text-sm text-white !important;
+}
+
+.toast-error
+{
+    @apply bg-hailo-400 text-sm text-white !important;
+}
+h2:where(.swal2-title)
+{
+    @apply pb-4 !important;
+}
+.swal2-popup.swal2-toast .swal2-title
+{
+    @apply border-0 !important;
+}
+
+
+.form-container h1{
+    @apply px-8 py-2 font-bold text-sm text-gray-500 text-2xl;
+}
+.table-container h1{
+    @apply px-8 py-2 font-bold text-sm text-gray-500 text-2xl;
+}
+.table-actions{
+    @apply isolate inline-flex rounded-md shadow-sm ;
+}
+.table-actions a:first-child {
+    @apply relative inline-flex items-center rounded-l-md bg-white px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10;
+}
+.table-actions a:last-child {
+    @apply relative -ml-px inline-flex items-center rounded-r-md bg-white px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10;
+}
+.table-actions a.delete {
+    @apply bg-stone-100 text-black hover:bg-hailo-400 hover:text-white;
+}
+.table-actions a.edit {
+    @apply bg-stone-100 text-black hover:bg-amber-200;
+}
+
+.form-section {
+    @apply mt-16 first:mt-0;
+}
+h1{
+    @apply text-sm font-bold text-gray-900 font-serif text-2xl;
+}
+
+h2{
+    @apply text-sm font-bold text-gray-700 mb-4 border-b border-gray-200 pb-2 font-serif;
+}
+
+h3{
+    @apply text-sm font-bold text-gray-700 mb-4 font-serif;
+}
+
+/******************************************************
+ *  Choices.js
+ ******************************************************/
+.choices {
+    @apply block w-full rounded-md border-0 py-0 leading-none text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6;
+}
+.choices__inner {
+    @apply bg-transparent border-0 outline-none appearance-none cursor-pointer py-1.5 text-sm !important;
+    min-height: 36px !important;
+}
+.choices__list .is-selected {
+    @apply text-hailo-400;
+}
+
+
+/* clears the ‘X’ from Internet Explorer */
+input[type=search]::-ms-clear { display: none; width : 0; height: 0; }
+input[type=search]::-ms-reveal { display: none; width : 0; height: 0; }
+/* clears the ‘X’ from Chrome */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration { display: none; }
