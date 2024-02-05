@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'dashboard' => 'Dashboard',
+    'dashboard' => 'DashboardApp',
     'permissions' => 'Usuarios',
     'roles' => 'Roles',
     'maintenance' => 'Mantenimiento',

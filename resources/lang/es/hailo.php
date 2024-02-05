@@ -28,6 +28,7 @@ return [
     'search' => 'Buscar',
     'cancel' => 'Cancelar',
     'all' => 'Todos',
+    'see_all' => 'Ver todos/as',
 
     // Generic messages that are use as defaults
     'no_records_found' => 'No se han encontrado registros',

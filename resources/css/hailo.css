@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-button.primary {
+button.primary, a.primary {
     @apply rounded-md bg-hailo-400
     px-3.5 py-2.5
     text-sm font-semibold text-white

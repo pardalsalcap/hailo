@@ -9,7 +9,7 @@ use Pardalsalcap\Hailo\Commands\HailoCreateUserCommand;
 use Pardalsalcap\Hailo\Livewire\Auth\ForgotApp;
 use Pardalsalcap\Hailo\Livewire\Auth\Login;
 use Pardalsalcap\Hailo\Livewire\Auth\ResetApp;
-use Pardalsalcap\Hailo\Livewire\Dashboard\Dashboard;
+use Pardalsalcap\Hailo\Livewire\Dashboard\DashboardApp;
 use Pardalsalcap\Hailo\Livewire\Forms\FormHandler;
 use Pardalsalcap\Hailo\Livewire\Profile\ProfileApp;
 use Pardalsalcap\Hailo\Livewire\Profile\ProfileMenu;
@@ -25,6 +25,7 @@ use Pardalsalcap\Hailo\View\Components\NavigationItem;
 use Pardalsalcap\Hailo\View\Components\Tables\RowActions;
 use Pardalsalcap\Hailo\View\Components\Tables\Table;
 use Pardalsalcap\Hailo\View\Components\Tables\TableElement;
+use Pardalsalcap\Hailo\View\Components\Widgets\TableWidget;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -63,7 +64,7 @@ class HailoServiceProvider extends PackageServiceProvider
         Livewire::component('login', Login::class);
         Livewire::component('forgot', ForgotApp::class);
         Livewire::component('reset', ResetApp::class);
-        Livewire::component('dashboard', Dashboard::class);
+        Livewire::component('dashboard', DashboardApp::class);
         Livewire::component('permissions-app', UsersApp::class);
         Livewire::component('roles-app', RolesApp::class);
         Livewire::component('search-bar', SearchBar::class);
@@ -79,6 +80,7 @@ class HailoServiceProvider extends PackageServiceProvider
         Blade::component('hailo::table', Table::class);
         Blade::component('hailo::table-element', TableElement::class);
         Blade::component('hailo::row-actions', RowActions::class);
+        Blade::component('hailo::table-widget', TableWidget::class);
 
     }
 }

@@ -9,5 +9,8 @@ return [
     ],
     'navigation' => new \Pardalsalcap\Hailo\Repositories\NavigationRepository(),
     'users_model' => \Pardalsalcap\Hailo\Models\User::class,
+    'dashboard_widgets'=>[
+
+    ],
 
 ];
