@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
     {{ Vite::useHotFile(public_path('hailo.hot'))
             ->useBuildDirectory('hailo')
-            ->withEntryPoints(['resources/css/hailo.css']) }}
+            ->withEntryPoints(['resources/css/hailo.css', 'resources/js/hailo.js']) }}
 </head>
 <body class="h-full">
 <div class="font-sans text-gray-900 antialiased">

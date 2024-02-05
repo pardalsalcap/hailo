@@ -6,7 +6,9 @@ use Illuminate\Support\Facades\Blade;
 use Livewire\Livewire;
 use Pardalsalcap\Hailo\Commands\HailoCommand;
 use Pardalsalcap\Hailo\Commands\HailoCreateUserCommand;
+use Pardalsalcap\Hailo\Livewire\Auth\ForgotApp;
 use Pardalsalcap\Hailo\Livewire\Auth\Login;
+use Pardalsalcap\Hailo\Livewire\Auth\ResetApp;
 use Pardalsalcap\Hailo\Livewire\Dashboard\Dashboard;
 use Pardalsalcap\Hailo\Livewire\Forms\FormHandler;
 use Pardalsalcap\Hailo\Livewire\Search\SearchBar;
@@ -57,10 +59,14 @@ class HailoServiceProvider extends PackageServiceProvider
         $this->loadRoutesFrom(__DIR__.'/../routes/hailo.php');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
+        // borrar estos componentes
+        //Livewire::component('form-handler', FormHandler::class);
+        //Livewire::component('table-handler', TableHandler::class);
+
         Livewire::component('login', Login::class);
+        Livewire::component('forgot', ForgotApp::class);
+        Livewire::component('reset', ResetApp::class);
         Livewire::component('dashboard', Dashboard::class);
-        Livewire::component('form-handler', FormHandler::class);
-        Livewire::component('table-handler', TableHandler::class);
         Livewire::component('permissions-app', UsersApp::class);
         Livewire::component('roles-app', RolesApp::class);
         Livewire::component('search-bar', SearchBar::class);
