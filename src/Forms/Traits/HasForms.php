@@ -13,7 +13,7 @@ trait HasForms
 
     public array $formData = [];
 
-    public ?int $register_id = null;
+    public int|string|null $register_id = null;
 
     public bool $load = true;
 
