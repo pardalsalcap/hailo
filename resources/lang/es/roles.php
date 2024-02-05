@@ -5,7 +5,7 @@ return [
     'field_label_name' => 'Nombre',
 
     'role_form_title'=>'Nuevo rol',
-    'role_form_title_edit'=>'Editando al rol :u',
+    'role_form_title_edit'=>'Editando el rol :u',
 
     'confirm_delete_title'=>'Confirma la eliminación del rol',
     'confirm_delete_text'=>'El rol será eliminado y no podrá recuperarse',

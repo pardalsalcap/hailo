@@ -28,7 +28,9 @@ class RoleRepository
                 TextInput::make('name')
                     ->label('Name')
                     ->label(__('hailo::roles.field_label_name'))
-                    ->required(),
+                    ->rules(function ($form) {
+                        return $form->getModel()? ['required', 'unique:roles,name,' . $form->getModel()?->id] : ['required', 'unique:roles,name'];
+                    }),
             ]);
     }
 

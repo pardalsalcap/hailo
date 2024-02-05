@@ -13,7 +13,6 @@ use Pardalsalcap\Hailo\Actions\Roles\StoreRole;
 use Pardalsalcap\Hailo\Actions\Roles\UpdateRole;
 use Pardalsalcap\Hailo\Forms\Traits\HasForms;
 use Pardalsalcap\Hailo\Repositories\RoleRepository;
-use Pardalsalcap\Hailo\Repositories\UserRepository;
 use Pardalsalcap\Hailo\Tables\Traits\CanDelete;
 use Pardalsalcap\Hailo\Tables\Traits\HasActions;
 use Pardalsalcap\Hailo\Tables\Traits\HasTables;
@@ -25,6 +24,8 @@ class RolesApp extends Component
     use HasTables, HasActions, CanDelete, HasForms;
 
     public string $roles_form_title = "";
+
+    protected RoleRepository $repository;
 
     protected $listeners = [
         'searchUpdated' => 'search',
@@ -47,7 +48,14 @@ class RolesApp extends Component
             'livewireAction' => 'destroyRole',
         ];
 
+        $this->repository = new RoleRepository();
+
         $this->roles_form_title = __('hailo::roles.role_form_title');
+    }
+
+    public function hydrate(): void
+    {
+        $this->repository = new RoleRepository();
     }
 
     public function getPaginationAppends(): array
@@ -60,7 +68,7 @@ class RolesApp extends Component
         ];
     }
 
-    public function destroy($id): void
+    public function destroy(): void
     {
         try {
             DestroyRole::run($this->deleting_id);
@@ -81,6 +89,7 @@ class RolesApp extends Component
     public function cancel(): void
     {
         $this->action = 'index';
+        $this->load = true;
         $this->roles_form_title = __('hailo::roles.role_form_title');
     }
 
@@ -89,18 +98,21 @@ class RolesApp extends Component
         try {
             DB::beginTransaction();
             $this->load = false;
-            $this->form(RoleRepository::form($this->loadModel()));
-            $this->validate($this->validationRules($this->getForm('role_form')));
-            StoreRole::run($this->getFormData('role_form'));
-            $this->cancel();
-            $this->dispatch('toast-success', ['title' => __('hailo::roles.saved')]);
-            $this->load = true;
+            $form =$this->form($this->repository->form($this->loadModel()));
+            $this->validate($this->validationRules($form));
+            StoreRole::run($this->getFormData($form->getName()));
+            $this->success();
             DB::commit();
-
         } catch (Throwable $e) {
             DB::rollBack();
-            $this->addValidationErrors('role_form', $e->errors());
-            $this->clearValidation();
+            if (isset($form))
+            {
+                $this->handleFormException($e, $form->getName(), __("hailo::roles.not_saved"));
+            }
+            else
+            {
+                $this->dispatch('toast-error', ['title' => __("hailo::roles.not_saved")]);
+            }
         }
     }
 
@@ -110,18 +122,28 @@ class RolesApp extends Component
             DB::beginTransaction();
             $this->load = false;
             $role = $this->loadModel();
-            $this->form(RoleRepository::form($role));
-            $this->validate($this->validationRules($this->getForm('role_form')));
-            UpdateRole::run($this->getFormData('role_form'), $role);
-            $this->cancel();
-            $this->dispatch('toast-success', ['title' => __('hailo::roles.saved')]);
-            $this->load = true;
+            $form = $this->form($this->repository->form($role));
+            $this->validate($this->validationRules($form));
+            UpdateRole::run($this->getFormData($form->getName()), $role);
+            $this->success();
             DB::commit();
         } catch (Throwable $e) {
             DB::rollBack();
-            $this->addValidationErrors('role_form', $e->errors());
-            $this->clearValidation();
+            if (isset($form))
+            {
+                $this->handleFormException($e, $form->getName(), __("hailo::roles.not_saved"));
+            }
+            else
+            {
+                $this->dispatch('toast-error', ['title' => __("hailo::roles.not_saved")]);
+            }
         }
+    }
+
+    public function success(): void
+    {
+        $this->cancel();
+        $this->dispatch('toast-success', ['title' => __('hailo::roles.saved')]);
     }
 
     public function loadModel(): Model
@@ -137,10 +159,9 @@ class RolesApp extends Component
             }
         }
         return new Role();
-
     }
 
-    public function search($q)
+    public function search($q): void
     {
         $this->q = $q;
         $this->cancel();
@@ -149,7 +170,7 @@ class RolesApp extends Component
 
     public function render(): View|Factory
     {
-        $this->table('roles_table', RoleRepository::table(new Role()))
+        $this->table('roles_table', $this->repository->table(new Role()))
             ->sortBy($this->sort_by)
             ->sortDirection($this->sort_direction)
             ->search($this->q)
@@ -157,14 +178,14 @@ class RolesApp extends Component
             ->executeQuery();
 
 
-        $this->form(RoleRepository::form($this->loadModel()))
+        $form = $this->form($this->repository->form($this->loadModel()))
             ->action($this->action == 'edit' ? 'update' : 'store')
             ->title($this->roles_form_title);
-        $this->processFormElements($this->getForm('role_form'), $this->getForm('role_form')->getSchema());
+        $this->processFormElements($form, $form->getSchema());
 
         return view('hailo::livewire.permissions.roles', [
             'roles_table' => $this->getTable('roles_table'),
-            'role_form' => $this->getForm('role_form'),
+            'role_form' => $form,
             'validation_errors' => $this->getValidationErrors()
         ])
             ->layout('hailo::layouts.main')
