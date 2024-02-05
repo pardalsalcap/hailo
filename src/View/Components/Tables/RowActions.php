@@ -6,7 +6,6 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\View\Component;
-use Pardalsalcap\Hailo\Tables\Columns\TextColumn;
 
 class RowActions extends Component
 {

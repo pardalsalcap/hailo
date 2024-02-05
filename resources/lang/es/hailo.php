@@ -17,18 +17,18 @@ return [
     'reset_button' => 'Establecer contraseña',
 
     'logout' => 'Cerrar sesión',
-    'open_profile_menu'=>'Abrir menú de perfil',
+    'open_profile_menu' => 'Abrir menú de perfil',
 
-    'save'=>'Guardar',
-    'select_one_option'=>'Selecciona una opción',
+    'save' => 'Guardar',
+    'select_one_option' => 'Selecciona una opción',
 
-    'confirm_yes'=>'Sí',
-    'confirm_no'=>'No',
+    'confirm_yes' => 'Sí',
+    'confirm_no' => 'No',
 
-    'search'=>'Buscar',
-    'cancel'=>'Cancelar',
-    'all'=>'Todos',
+    'search' => 'Buscar',
+    'cancel' => 'Cancelar',
+    'all' => 'Todos',
 
     // Generic messages that are use as defaults
-    'no_records_found'=>'No se han encontrado registros'
+    'no_records_found' => 'No se han encontrado registros',
 ];

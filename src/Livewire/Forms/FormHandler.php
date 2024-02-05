@@ -24,17 +24,13 @@ class FormHandler extends Component
                 if (empty($element->getValue()) and isset($this->model->{$element->getName()}) and $element->getType() !== 'password') {
                     $element->value($this->model->{$element->getName()});
                     $this->formData[$element->getName()] = $this->model->{$element->getName()} ?? '';
-                }
-                else
-                {
+                } else {
                     $this->formData[$element->getName()] = $element->getDefault() ?? '';
                 }
 
             }
         }
     }
-
-
 
     public function validationRules($form): array
     {
@@ -46,6 +42,7 @@ class FormHandler extends Component
                 $rules['formData.'.$element->getName()] = $element->getRules();
             }
         }
+
         return $rules;
     }
 

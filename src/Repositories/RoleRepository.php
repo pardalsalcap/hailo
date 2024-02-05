@@ -2,18 +2,13 @@
 
 namespace Pardalsalcap\Hailo\Repositories;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
-use Pardalsalcap\Hailo\Forms\Fields\SelectInput;
 use Pardalsalcap\Hailo\Forms\Fields\TextInput;
 use Pardalsalcap\Hailo\Forms\Form;
-use Pardalsalcap\Hailo\Forms\Section;
-use Pardalsalcap\Hailo\Rules\MatchOldPassword;
 use Pardalsalcap\Hailo\Tables\Columns\TextColumn;
 use Pardalsalcap\Hailo\Tables\Table;
 use Spatie\Permission\Models\Role;
-use Exception;
 
 class RoleRepository
 {
@@ -29,7 +24,7 @@ class RoleRepository
                     ->label('Name')
                     ->label(__('hailo::roles.field_label_name'))
                     ->rules(function ($form) {
-                        return $form->getModel()? ['required', 'unique:roles,name,' . $form->getModel()?->id] : ['required', 'unique:roles,name'];
+                        return $form->getModel() ? ['required', 'unique:roles,name,'.$form->getModel()?->id] : ['required', 'unique:roles,name'];
                     }),
             ]);
     }
@@ -41,11 +36,11 @@ class RoleRepository
             ->perPage(25)
             ->hasEditAction(true)
             ->hasDeleteAction(true)
-            ->noRecordsFound(__("hailo::roles.no_records_found"))
+            ->noRecordsFound(__('hailo::roles.no_records_found'))
             ->schema([
                 TextColumn::make('name')
                     ->label(__('hailo::roles.field_label_name'))
-                    ->searchable()
+                    ->searchable(),
             ]);
     }
 
@@ -55,6 +50,7 @@ class RoleRepository
         $model->name = $values['name'];
         $model->guard_name = config('auth.defaults.guard');
         $model->save();
+
         return $model;
     }
 
@@ -62,6 +58,7 @@ class RoleRepository
     {
         $model->name = $values['name'];
         $model->save();
+
         return $model;
     }
 
@@ -72,11 +69,12 @@ class RoleRepository
     {
         $role = Role::find($role_id);
         if ($role) {
-            if (!$role->delete()) {
-                throw new \Exception(__("hailo::roles.not_deleted"));
-            };
+            if (! $role->delete()) {
+                throw new \Exception(__('hailo::roles.not_deleted'));
+            }
+
             return true;
         }
-        throw new \Exception(__("hailo::roles.not_found"));
+        throw new \Exception(__('hailo::roles.not_found'));
     }
 }

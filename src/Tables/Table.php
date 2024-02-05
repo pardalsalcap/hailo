@@ -2,14 +2,16 @@
 
 namespace Pardalsalcap\Hailo\Tables;
 
+use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Closure;
+
 class Table
 {
     protected array $schema = [];
 
     protected string $title = '';
+
     protected string $no_records_found = '';
 
     protected string $name = '';
@@ -23,22 +25,24 @@ class Table
     protected $data = [];
 
     protected bool $hasEditAction = true;
+
     protected bool $hasDeleteAction = false;
 
     protected array $configuration = [];
 
-    protected string $q = "";
+    protected string $q = '';
 
     protected $extraFields = [];
 
     protected array $paginationAppends = [];
 
-    protected string $sortField = "id";
-    protected string $sortDirection = "ASC";
+    protected string $sortField = 'id';
+
+    protected string $sortDirection = 'ASC';
 
     protected array $filters = [];
 
-    protected string $currentFilter = "all";
+    protected string $currentFilter = 'all';
 
     protected array $relations = [];
 
@@ -130,7 +134,6 @@ class Table
         return $this;
     }
 
-
     public function paginationAppends(array $appends): self
     {
         $this->paginationAppends = $appends;
@@ -138,13 +141,14 @@ class Table
         return $this;
     }
 
-    public function addFilter ($name, Closure $filter, $label):self
+    public function addFilter($name, Closure $filter, $label): self
     {
         $this->filters[$name] = [
-            "name"=>$name,
-            "filter"=>$filter,
-            "label"=>$label,
+            'name' => $name,
+            'filter' => $filter,
+            'label' => $label,
         ];
+
         return $this;
     }
 
@@ -167,10 +171,10 @@ class Table
 
     public function getNoRecordsFound(): string
     {
-        if (empty($this->no_records_found))
-        {
+        if (empty($this->no_records_found)) {
             $this->no_records_found = __('hailo::hailo.no_records_found');
         }
+
         return $this->no_records_found;
     }
 
@@ -233,7 +237,8 @@ class Table
     {
         return $this->currentFilter;
     }
-    public function hasFilters():bool
+
+    public function hasFilters(): bool
     {
         return count($this->filters) > 0;
     }
@@ -268,11 +273,12 @@ class Table
         $headings = [];
         foreach ($this->schema as $field) {
             $headings[$field->getName()] = [
-                "label" => $field->getLabel(),
-                "name" => $field->getName(),
-                "sortable" => $field->isSortable(),
+                'label' => $field->getLabel(),
+                'name' => $field->getName(),
+                'sortable' => $field->isSortable(),
             ];
         }
+
         return $headings;
     }
 
@@ -280,14 +286,15 @@ class Table
     {
         $fields = [];
         foreach ($this->schema as $field) {
-            if (!$field->isRelation()) {
+            if (! $field->isRelation()) {
                 $fields[] = $field->getName();
             }
         }
-        if (!in_array("id", $fields)) {
-            array_unshift($fields, "id");
+        if (! in_array('id', $fields)) {
+            array_unshift($fields, 'id');
         }
         $fields = array_merge($fields, $this->extraFields);
+
         return $fields;
     }
 
@@ -299,22 +306,23 @@ class Table
     public function executeQuery(): self
     {
         $this->data = $this->query()
-            ->when(!empty($this->q), function ($query) {
+            ->when(! empty($this->q), function ($query) {
                 foreach ($this->getSchema() as $field) {
                     if ($field->isSearchable()) {
-                        $query->orWhere($field->getName(), 'like', '%' . $this->q . '%');
+                        $query->orWhere($field->getName(), 'like', '%'.$this->q.'%');
                     }
                 }
             })
-            ->when(!empty($this->relations), function ($query) {
+            ->when(! empty($this->relations), function ($query) {
                 $query->with($this->relations);
             })
-            ->when(!empty($this->currentFilter) and $this->currentFilter !== "all", function ($query) {
+            ->when(! empty($this->currentFilter) and $this->currentFilter !== 'all', function ($query) {
                 $query->where($this->filters[$this->currentFilter]['filter']);
             })
             ->select($this->fields())
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
+
         return $this;
     }
 
@@ -339,9 +347,10 @@ class Table
 
     public function search($q): self
     {
-        if (!empty($q)) {
+        if (! empty($q)) {
             $this->q = $q;
         }
+
         return $this;
     }
 
@@ -350,6 +359,7 @@ class Table
         if ($this->sortField === $field) {
             return $this->sortDirection === 'ASC' ? 'DESC' : 'ASC';
         }
+
         return 'ASC';
     }
 
@@ -358,6 +368,7 @@ class Table
         if ($this->sortField === $field) {
             return $this->sortDirection === 'ASC' ? 'sort-desc' : 'sort-asc';
         }
+
         return 'sort-asc';
     }
 
@@ -366,7 +377,7 @@ class Table
         if ($this->sortField === $field) {
             return 'text-hailo-600';
         }
+
         return 'text-gray-400';
     }
-
 }

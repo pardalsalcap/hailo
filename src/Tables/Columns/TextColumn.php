@@ -2,23 +2,26 @@
 
 namespace Pardalsalcap\Hailo\Tables\Columns;
 
+use Closure;
 use Illuminate\Database\Eloquent\Model;
+use Pardalsalcap\Hailo\Tables\Traits\HasCss;
 use Pardalsalcap\Hailo\Tables\Traits\HasLabel;
 use Pardalsalcap\Hailo\Tables\Traits\HasSearch;
 use Pardalsalcap\Hailo\Tables\Traits\HasUrl;
-use Pardalsalcap\Hailo\Tables\Traits\HasCss;
 use Pardalsalcap\Hailo\Tables\Traits\IsRelation;
 use Pardalsalcap\Hailo\Tables\Traits\IsSortable;
-use Closure;
+
 class TextColumn
 {
-    use HasLabel, HasUrl, HasCss, HasSearch, IsSortable, IsRelation;
+    use HasCss, HasLabel, HasSearch, HasUrl, IsRelation, IsSortable;
+
     protected string $name = '';
 
     protected mixed $value = null;
+
     protected mixed $display = null;
 
-    protected Closure|null $displayFn = null;
+    protected ?Closure $displayFn = null;
 
     public function __construct(string $name)
     {
@@ -48,9 +51,9 @@ class TextColumn
         return $this;
     }
 
-    public function display(Closure|null $display=null): self
+    public function display(?Closure $display = null): self
     {
-        if (!is_null($display)) {
+        if (! is_null($display)) {
             $this->displayFn = $display;
         }
 
@@ -69,10 +72,10 @@ class TextColumn
 
     public function getDisplay(Model $model)
     {
-        if (!is_null($this->displayFn)) {
+        if (! is_null($this->displayFn)) {
             return call_user_func($this->displayFn, $model);
         }
 
-        return !empty($this->getValue())?$this->getValue():$model->{$this->getName()};
+        return ! empty($this->getValue()) ? $this->getValue() : $model->{$this->getName()};
     }
 }

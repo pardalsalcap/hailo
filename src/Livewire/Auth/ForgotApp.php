@@ -22,9 +22,9 @@ class ForgotApp extends Component
         $this->validate($this->rules());
 
         $status = Password::sendResetLink(
-           [
-                'email' => $this->email
-           ]
+            [
+                'email' => $this->email,
+            ]
         );
         if ($status == Password::RESET_LINK_SENT) {
             $this->dispatch('toast-success', ['title' => __($status)]);

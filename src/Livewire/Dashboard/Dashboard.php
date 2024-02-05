@@ -3,8 +3,6 @@
 namespace Pardalsalcap\Hailo\Livewire\Dashboard;
 
 use Livewire\Component;
-use Pardalsalcap\Hailo\Forms\Section;
-use Pardalsalcap\Hailo\Repositories\FormRespository;
 
 class Dashboard extends Component
 {
@@ -15,8 +13,6 @@ class Dashboard extends Component
 
     }
 
-
-
     public function render()
     {
 
@@ -24,6 +20,4 @@ class Dashboard extends Component
             ->layout('hailo::layouts.main')
             ->title(__('hailo::hailo.dashboard_html_title', ['name' => config('app.name')]));
     }
-
-
 }

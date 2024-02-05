@@ -7,8 +7,8 @@ use Pardalsalcap\Hailo\Livewire\Auth\Login;
 use Pardalsalcap\Hailo\Livewire\Auth\ResetApp;
 use Pardalsalcap\Hailo\Livewire\Dashboard\Dashboard;
 use Pardalsalcap\Hailo\Livewire\Profile\ProfileApp;
-use Pardalsalcap\Hailo\Livewire\Users\UsersApp;
 use Pardalsalcap\Hailo\Livewire\Users\RolesApp;
+use Pardalsalcap\Hailo\Livewire\Users\UsersApp;
 
 Route::middleware(['web'])
     ->prefix(config('hailo.route'))

@@ -13,32 +13,39 @@ class AppHandler extends Component
     use WithPagination;
 
     protected Table $table;
+
     protected Form $form;
+
     public array $tableData = [];
+
     public array $formData = [];
+
     public ?Model $model = null;
+
     public array $models = [
-        "table"=>null,
-        "form"=>null,
+        'table' => null,
+        'form' => null,
     ];
+
     public string $tableSortField = 'id';
-    public string $tableSortDirection= 'ASC';
+
+    public string $tableSortDirection = 'ASC';
+
     public array $paginationAppends = [];
 
-    public string $filter = "all";
-
+    public string $filter = 'all';
 
     protected function queryString()
     {
-       return [
-           'tableSortField' => ['except' => 'id', 'as' => 'sort_by'],
-           'tableSortDirection' => ['except' => ['ASC', "null"], 'as' => 'sort_direction'],
-           'q' => ['except' => ''],
-           'filter' => ['except' => ['all', '']],
-         ];
+        return [
+            'tableSortField' => ['except' => 'id', 'as' => 'sort_by'],
+            'tableSortDirection' => ['except' => ['ASC', 'null'], 'as' => 'sort_direction'],
+            'q' => ['except' => ''],
+            'filter' => ['except' => ['all', '']],
+        ];
     }
 
-    public function mount ()
+    public function mount()
     {
         $this->tableSortField = request()->get('sort_by', $this->tableSortField);
         $this->tableSortDirection = request()->get('sort_direction', $this->tableSortDirection);
@@ -54,9 +61,7 @@ class AppHandler extends Component
                 if (empty($element->getValue()) and isset($this->models['form']->{$element->getName()}) and $element->getType() !== 'password') {
                     $element->value($this->models['form']->{$element->getName()});
                     $this->formData[$element->getName()] = $this->models['form']->{$element->getName()} ?? '';
-                }
-                else
-                {
+                } else {
                     $this->formData[$element->getName()] = $element->getDefault() ?? '';
                 }
 
@@ -74,10 +79,11 @@ class AppHandler extends Component
                 $rules['formData.'.$element->getName()] = $element->getRules();
             }
         }
+
         return $rules;
     }
 
-    public function sort ($field, $direction)
+    public function sort($field, $direction)
     {
         $this->tableSortField = $field;
         $this->tableSortDirection = $direction;
@@ -101,7 +107,7 @@ class AppHandler extends Component
     public function filterBy(string $filter): void
     {
         $this->filter = $filter;
-        debug($this->filter." IN FILTER BY");
+        debug($this->filter.' IN FILTER BY');
         $this->resetPage();
     }
 }

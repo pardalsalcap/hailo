@@ -2,7 +2,6 @@
 
 namespace Pardalsalcap\Hailo\Livewire\Users;
 
-use DebugBar\DebugBar;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -13,7 +12,6 @@ use Pardalsalcap\Hailo\Actions\Users\DestroyUser;
 use Pardalsalcap\Hailo\Actions\Users\StoreUser;
 use Pardalsalcap\Hailo\Actions\Users\UpdateUser;
 use Pardalsalcap\Hailo\Forms\Traits\HasForms;
-use Pardalsalcap\Hailo\Helpers\Debug;
 use Pardalsalcap\Hailo\Repositories\UserRepository;
 use Pardalsalcap\Hailo\Tables\Traits\CanDelete;
 use Pardalsalcap\Hailo\Tables\Traits\HasActions;
@@ -22,11 +20,11 @@ use Throwable;
 
 class UsersApp extends Component
 {
-    use HasTables, HasActions, CanDelete, HasForms;
+    use CanDelete, HasActions, HasForms, HasTables;
 
     protected UserRepository $repository;
 
-    public string $user_form_title = "";
+    public string $user_form_title = '';
 
     protected $listeners = [
         'searchUpdated' => 'search',
@@ -35,7 +33,7 @@ class UsersApp extends Component
 
     protected $queryString = [
         'sort_by' => ['except' => 'id', 'as' => 'sort_by'],
-        'sort_direction' => ['except' => ['ASC', "null"], 'as' => 'sort_direction'],
+        'sort_direction' => ['except' => ['ASC', 'null'], 'as' => 'sort_direction'],
         'q' => ['except' => ''],
         'filter' => ['except' => 'all'],
     ];
@@ -55,14 +53,15 @@ class UsersApp extends Component
         $this->loadForms();
     }
 
-    public function loadForms ()
+    public function loadForms()
     {
         $this->form($this->repository->form($this->loadModel()))
             ->action($this->action == 'edit' ? 'update' : 'store')
             ->title($this->user_form_title);
     }
 
-    public function hydrate(){
+    public function hydrate()
+    {
         $this->repository = new UserRepository();
         $this->loadForms();
     }
@@ -85,7 +84,7 @@ class UsersApp extends Component
             $this->dispatch('toast-success', ['title' => __('hailo::users.deleted')]);
             $this->deleting_id = null;
         } catch (Exception $e) {
-            $this->dispatch('toast-error', ['title' => __('hailo::users.not_deleted') . ':<br /> ' . $e->getMessage()]);
+            $this->dispatch('toast-error', ['title' => __('hailo::users.not_deleted').':<br /> '.$e->getMessage()]);
         }
     }
 
@@ -108,7 +107,7 @@ class UsersApp extends Component
         try {
             DB::beginTransaction();
             $this->load = false;
-            $form =$this->form($this->repository->form($this->loadModel()));
+            $form = $this->form($this->repository->form($this->loadModel()));
             $this->validate($this->validationRules($form));
             StoreUser::run($this->getFormData($form->getName()));
             $this->cancel();
@@ -145,15 +144,17 @@ class UsersApp extends Component
     {
         if ($this->action == 'edit') {
             $user = config('hailo.users_model')::find($this->register_id);
-            if (!$user) {
+            if (! $user) {
                 $this->cancel();
                 $this->dispatch('toast-error', ['title' => __('hailo::users.not_found')]);
             } else {
                 $this->user_form_title = __('hailo::users.user_form_title_edit', ['u' => $user->name]);
+
                 return $user;
             }
         }
         $class = config('hailo.users_model');
+
         return new $class;
 
     }
@@ -180,7 +181,7 @@ class UsersApp extends Component
         return view('hailo::livewire.permissions.users', [
             'users_table' => $this->getTable('users_table'),
             'user_form' => $this->getForm('user_form'),
-            'validation_errors' => $this->getValidationErrors()
+            'validation_errors' => $this->getValidationErrors(),
         ])
             ->layout('hailo::layouts.main')
             ->title(__('hailo::users.html_title', ['name' => config('app.name')]));

@@ -14,7 +14,7 @@ class Form extends Component
      */
     public function __construct(public \Pardalsalcap\Hailo\Forms\Form $form, public $validation = null)
     {
-        if (!is_null($this->validation)) {
+        if (! is_null($this->validation)) {
             $this->validation = new MessageBag($this->validation);
         }
     }

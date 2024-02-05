@@ -47,7 +47,7 @@ class Form
         return $this;
     }
 
-    public function getModel ()
+    public function getModel()
     {
         return $this->model;
     }

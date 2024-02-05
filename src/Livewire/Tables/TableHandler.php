@@ -5,12 +5,12 @@ namespace Pardalsalcap\Hailo\Livewire\Tables;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Pardalsalcap\Hailo\Forms\Form;
 use Pardalsalcap\Hailo\Tables\Table;
 
 class TableHandler extends Component
 {
     use WithPagination;
+
     protected Table $table;
 
     public array $tableData = [];

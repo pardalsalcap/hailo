@@ -11,6 +11,7 @@ class ProfileApp extends Component
     public function render(): View|Factory
     {
         $this->dispatch('showSearch', false);
+
         return view('hailo::livewire.permissions.profile')
             ->layout('hailo::layouts.main')
             ->title(__('hailo::profile.html_title', ['name' => config('app.name')]));

@@ -1,12 +1,14 @@
 <?php
 
 namespace Pardalsalcap\Hailo\Tables\Traits;
+
 use Closure;
 use Illuminate\Database\Eloquent\Model;
 
 trait HasUrl
 {
     protected string $url = '';
+
     protected bool $hasUrl = false;
 
     protected bool $openInNewTab = true;
@@ -17,6 +19,7 @@ trait HasUrl
     {
         if (is_callable($url)) {
             $this->getUrlFn = $url;
+
             return $this;
         }
         $this->url = $url;
@@ -38,11 +41,12 @@ trait HasUrl
         return $this;
     }
 
-    public function getUrl(?Model $model): string|null
+    public function getUrl(?Model $model): ?string
     {
         if (is_callable($this->getUrlFn)) {
             return call_user_func($this->getUrlFn, $model);
         }
+
         return $this->url;
     }
 

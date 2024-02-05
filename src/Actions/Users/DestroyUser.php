@@ -2,7 +2,6 @@
 
 namespace Pardalsalcap\Hailo\Actions\Users;
 
-use App\Models\User;
 use Exception;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Pardalsalcap\Hailo\Repositories\UserRepository;

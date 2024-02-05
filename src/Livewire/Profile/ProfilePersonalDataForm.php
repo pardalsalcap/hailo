@@ -2,7 +2,6 @@
 
 namespace Pardalsalcap\Hailo\Livewire\Profile;
 
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
@@ -19,7 +18,8 @@ class ProfilePersonalDataForm extends Component
     use HasActions, HasForms;
 
     protected UserRepository $repository;
-    public string $user_form_title = "";
+
+    public string $user_form_title = '';
 
     public function mount(): void
     {
@@ -41,7 +41,6 @@ class ProfilePersonalDataForm extends Component
         $this->repository = new UserRepository();
         $this->loadForms();
     }
-
 
     public function cancel(): void
     {
@@ -75,13 +74,12 @@ class ProfilePersonalDataForm extends Component
     public function loadPreferences(): void
     {
         if ($this->load) {
-            auth()->user()->load("preferences");
+            auth()->user()->load('preferences');
             foreach (auth()->user()->preferences->pluck('value', 'key') as $key => $value) {
                 $this->addFormData('profile_form', $key, $value);
             }
         }
     }
-
 
     public function success(): void
     {
@@ -102,7 +100,7 @@ class ProfilePersonalDataForm extends Component
         return view('hailo::livewire.permissions.profile_personal',
             [
                 'profile_form' => $this->getForm('profile_form'),
-                'validation_errors' => $this->getValidationErrors()
+                'validation_errors' => $this->getValidationErrors(),
             ])
             ->layout('hailo::layouts.main')
             ->title(__('hailo::profile.html_title', ['name' => config('app.name')]));

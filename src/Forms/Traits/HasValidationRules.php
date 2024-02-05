@@ -1,7 +1,9 @@
 <?php
 
 namespace Pardalsalcap\Hailo\Forms\Traits;
+
 use Closure;
+
 trait HasValidationRules
 {
     protected array|Closure $rules = [];
@@ -24,10 +26,11 @@ trait HasValidationRules
 
     public function getRules($form): array
     {
-        if(is_callable($this->rules)) {
+        if (is_callable($this->rules)) {
             return call_user_func($this->rules, $form);
 
         }
+
         return $this->rules;
     }
 }

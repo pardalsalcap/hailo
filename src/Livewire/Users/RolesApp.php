@@ -21,9 +21,9 @@ use Throwable;
 
 class RolesApp extends Component
 {
-    use HasTables, HasActions, CanDelete, HasForms;
+    use CanDelete, HasActions, HasForms, HasTables;
 
-    public string $roles_form_title = "";
+    public string $roles_form_title = '';
 
     protected RoleRepository $repository;
 
@@ -34,8 +34,8 @@ class RolesApp extends Component
 
     protected $queryString = [
         'sort_by' => ['except' => 'id', 'as' => 'sort_by'],
-        'sort_direction' => ['except' => ['ASC', "null"], 'as' => 'sort_direction'],
-        'q' => ['except' => '']
+        'sort_direction' => ['except' => ['ASC', 'null'], 'as' => 'sort_direction'],
+        'q' => ['except' => ''],
     ];
 
     public function mount(): void
@@ -76,7 +76,7 @@ class RolesApp extends Component
             $this->dispatch('toast-success', ['title' => __('hailo::roles.deleted')]);
             $this->deleting_id = null;
         } catch (Exception $e) {
-            $this->dispatch('toast-error', ['title' => __('hailo::roles.not_deleted') . ':<br /> ' . $e->getMessage()]);
+            $this->dispatch('toast-error', ['title' => __('hailo::roles.not_deleted').':<br /> '.$e->getMessage()]);
         }
     }
 
@@ -98,20 +98,17 @@ class RolesApp extends Component
         try {
             DB::beginTransaction();
             $this->load = false;
-            $form =$this->form($this->repository->form($this->loadModel()));
+            $form = $this->form($this->repository->form($this->loadModel()));
             $this->validate($this->validationRules($form));
             StoreRole::run($this->getFormData($form->getName()));
             $this->success();
             DB::commit();
         } catch (Throwable $e) {
             DB::rollBack();
-            if (isset($form))
-            {
-                $this->handleFormException($e, $form->getName(), __("hailo::roles.not_saved"));
-            }
-            else
-            {
-                $this->dispatch('toast-error', ['title' => __("hailo::roles.not_saved")]);
+            if (isset($form)) {
+                $this->handleFormException($e, $form->getName(), __('hailo::roles.not_saved'));
+            } else {
+                $this->dispatch('toast-error', ['title' => __('hailo::roles.not_saved')]);
             }
         }
     }
@@ -129,13 +126,10 @@ class RolesApp extends Component
             DB::commit();
         } catch (Throwable $e) {
             DB::rollBack();
-            if (isset($form))
-            {
-                $this->handleFormException($e, $form->getName(), __("hailo::roles.not_saved"));
-            }
-            else
-            {
-                $this->dispatch('toast-error', ['title' => __("hailo::roles.not_saved")]);
+            if (isset($form)) {
+                $this->handleFormException($e, $form->getName(), __('hailo::roles.not_saved'));
+            } else {
+                $this->dispatch('toast-error', ['title' => __('hailo::roles.not_saved')]);
             }
         }
     }
@@ -150,14 +144,16 @@ class RolesApp extends Component
     {
         if ($this->action == 'edit') {
             $role = Role::find($this->register_id);
-            if (!$role) {
+            if (! $role) {
                 $this->cancel();
                 $this->dispatch('toast-error', ['title' => __('hailo::roles.not_found')]);
             } else {
                 $this->roles_form_title = __('hailo::roles.role_form_title_edit', ['u' => $role->name]);
+
                 return $role;
             }
         }
+
         return new Role();
     }
 
@@ -177,7 +173,6 @@ class RolesApp extends Component
             ->filterBy($this->filter)
             ->executeQuery();
 
-
         $form = $this->form($this->repository->form($this->loadModel()))
             ->action($this->action == 'edit' ? 'update' : 'store')
             ->title($this->roles_form_title);
@@ -186,7 +181,7 @@ class RolesApp extends Component
         return view('hailo::livewire.permissions.roles', [
             'roles_table' => $this->getTable('roles_table'),
             'role_form' => $form,
-            'validation_errors' => $this->getValidationErrors()
+            'validation_errors' => $this->getValidationErrors(),
         ])
             ->layout('hailo::layouts.main')
             ->title(__('hailo::roles.html_title', ['name' => config('app.name')]));

@@ -12,12 +12,14 @@ use Livewire\Component;
 class ResetApp extends Component
 {
     public string $email = '';
+
     public string $token = '';
 
     public string $password = '';
+
     public string $password_confirmation = '';
 
-    public function mount ()
+    public function mount()
     {
         $this->token = request()->route('token');
         $this->email = request()->get('email');
@@ -36,9 +38,9 @@ class ResetApp extends Component
                 'email' => $this->email,
                 'password' => $this->password,
                 'password_confirmation' => $this->password_confirmation,
-                'token' => $this->token
+                'token' => $this->token,
             ],
-            function ($user)  {
+            function ($user) {
                 $user->forceFill([
                     'password' => Hash::make($this->password),
                     'remember_token' => Str::random(60),
@@ -71,9 +73,9 @@ class ResetApp extends Component
         // to send the link, we will examine the response then see the message we
         // need to show to the user. Finally, we'll send out a proper response.
         $status = Password::sendResetLink(
-           [
-                'email' => $this->email
-           ]
+            [
+                'email' => $this->email,
+            ]
         );
         if ($status == Password::RESET_LINK_SENT) {
             $this->redirect(route('hailo.login'));

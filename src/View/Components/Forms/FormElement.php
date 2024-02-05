@@ -5,7 +5,6 @@ namespace Pardalsalcap\Hailo\View\Components\Forms;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use Pardalsalcap\Hailo\Forms\Fields\FormField;
 use Pardalsalcap\Hailo\Forms\Fields\HiddenInput;
 use Pardalsalcap\Hailo\Forms\Fields\SelectInput;
 use Pardalsalcap\Hailo\Forms\Fields\TextInput;
@@ -32,7 +31,7 @@ class FormElement extends Component
             return view('hailo::components.forms.text-input', ['input' => $this->element]);
         } elseif ($this->element instanceof SelectInput) {
             return view('hailo::components.forms.select-input', ['input' => $this->element]);
-        }elseif ($this->element instanceof HiddenInput) {
+        } elseif ($this->element instanceof HiddenInput) {
             return view('hailo::components.forms.hidden-input', ['input' => $this->element]);
         }
 

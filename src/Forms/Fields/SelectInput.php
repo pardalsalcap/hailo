@@ -12,7 +12,7 @@ use Pardalsalcap\Hailo\Forms\Traits\HasValidationRules;
 
 class SelectInput implements FormField
 {
-    use HasDefault, HasLabel, HasPlaceholder, HasType, HasValidationRules, HasOptions, HasRelation;
+    use HasDefault, HasLabel, HasOptions, HasPlaceholder, HasRelation, HasType, HasValidationRules;
 
     protected string $name = '';
 

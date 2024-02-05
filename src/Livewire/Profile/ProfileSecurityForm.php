@@ -19,7 +19,8 @@ class ProfileSecurityForm extends Component
     use HasActions, HasForms;
 
     protected UserRepository $repository;
-    public string $user_form_title = "";
+
+    public string $user_form_title = '';
 
     public function mount(): void
     {
@@ -76,13 +77,13 @@ class ProfileSecurityForm extends Component
         return auth()->user();
     }
 
-
     public function render(): View|Factory
     {
         $this->processFormElements($this->getForm('security_form'), $this->getForm('security_form')->getSchema());
+
         return view('hailo::livewire.permissions.profile_security', [
             'security_form' => $this->getForm('security_form'),
-            'validation_errors' => $this->getValidationErrors()
+            'validation_errors' => $this->getValidationErrors(),
         ])
             ->layout('hailo::layouts.main')
             ->title(__('hailo::profile.html_title', ['name' => config('app.name')]));

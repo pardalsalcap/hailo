@@ -11,7 +11,7 @@ use Pardalsalcap\Hailo\Forms\Traits\HasValidationRules;
 
 class TextInput implements FormField
 {
-    use HasDefault, HasLabel, HasPlaceholder, HasType, HasValidationRules, HasRelation;
+    use HasDefault, HasLabel, HasPlaceholder, HasRelation, HasType, HasValidationRules;
 
     protected string $name = '';
 

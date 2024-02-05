@@ -13,7 +13,7 @@ trait HasDefault
         return $this;
     }
 
-    public function getDefault(): string|null
+    public function getDefault(): ?string
     {
         return $this->default;
     }

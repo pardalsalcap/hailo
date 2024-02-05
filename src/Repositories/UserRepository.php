@@ -2,6 +2,7 @@
 
 namespace Pardalsalcap\Hailo\Repositories;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
@@ -13,7 +14,6 @@ use Pardalsalcap\Hailo\Rules\MatchOldPassword;
 use Pardalsalcap\Hailo\Tables\Columns\TextColumn;
 use Pardalsalcap\Hailo\Tables\Table;
 use Spatie\Permission\Models\Role;
-use Exception;
 
 class UserRepository
 {
@@ -39,9 +39,10 @@ class UserRepository
                             return [
                                 'required',
                                 'email',
-                                'unique:users,email,' . $form->getModel()->id
+                                'unique:users,email,'.$form->getModel()->id,
                             ];
                         }
+
                         return [
                             'required',
                             'email',
@@ -57,12 +58,12 @@ class UserRepository
                         ->mixedCase()
                         ->numbers()
                         ->symbols()
-                        ->uncompromised()
+                        ->uncompromised(),
                     ])
-                    ->required(!$user->id),
+                    ->required(! $user->id),
                 SelectInput::make('rol')
-                    ->label(__("hailo::users.field_label_rol"))
-                    ->placeholder(__("hailo::users.field_label_rol"))
+                    ->label(__('hailo::users.field_label_rol'))
+                    ->placeholder(__('hailo::users.field_label_rol'))
                     ->relation('roles', 'name')
                     ->options((new UserRepository())->roles())
                     ->required(),
@@ -79,25 +80,25 @@ class UserRepository
             ->button(__('hailo::hailo.save'))
             ->schema([
                 Section::make('personal_data')
-                    ->title(__("hailo::profile.profile_personal_data_section"))
+                    ->title(__('hailo::profile.profile_personal_data_section'))
                     ->columns(2)
                     ->schema([
                         TextInput::make('name')
-                            ->label(__("hailo::profile.field_label_name"))
-                            ->placeholder(__("hailo::profile.field_label_name"))
+                            ->label(__('hailo::profile.field_label_name'))
+                            ->placeholder(__('hailo::profile.field_label_name'))
                             ->required(),
                         TextInput::make('email')
                             ->type('email')
                             ->label(__('hailo::profile.field_label_email'))
                             ->placeholder('example@example.com')
-                            ->rules( [
+                            ->rules([
                                 'required',
                                 'email',
-                                'unique:users,email,' . auth()->id()
+                                'unique:users,email,'.auth()->id(),
                             ]),
                     ]),
                 Section::make('preferences-section')
-                    ->title(__("hailo::profile.profile_preferences_section"))
+                    ->title(__('hailo::profile.profile_preferences_section'))
                     ->columns(2)
                     ->schema([
                         SelectInput::make('mode')
@@ -129,27 +130,25 @@ class UserRepository
                     ->columns(1)
                     ->schema([
                         TextInput::make('password_current')
-                            ->label(__("hailo::profile.field_label_current_password"))
+                            ->label(__('hailo::profile.field_label_current_password'))
                             ->type('password')
-                            ->placeholder(__("hailo::profile.field_label_current_password"))
-                            ->rules(['required', new MatchOldPassword()])
-                        ,
+                            ->placeholder(__('hailo::profile.field_label_current_password'))
+                            ->rules(['required', new MatchOldPassword()]),
                         TextInput::make('password')
-                            ->label(__("hailo::profile.field_label_new_password"))
+                            ->label(__('hailo::profile.field_label_new_password'))
                             ->type('password')
-                            ->placeholder(__("hailo::profile.field_label_new_password"))
+                            ->placeholder(__('hailo::profile.field_label_new_password'))
                             ->rules(['confirmed', 'required', Password::min(8)
                                 ->letters()
                                 ->mixedCase()
                                 ->numbers()
                                 ->symbols()
-                                ->uncompromised()
-                            ])
-                        ,
+                                ->uncompromised(),
+                            ]),
                         TextInput::make('password_confirmation')
                             ->type('password')
-                            ->label(__("hailo::profile.field_label_new_password_confirmation"))
-                            ->placeholder(__("hailo::profile.field_label_new_password_confirmation"))
+                            ->label(__('hailo::profile.field_label_new_password_confirmation'))
+                            ->placeholder(__('hailo::profile.field_label_new_password_confirmation'))
                             ->required(),
                     ]),
             ]);
@@ -163,13 +162,13 @@ class UserRepository
             ->hasEditAction(true)
             ->hasDeleteAction(true)
             ->relations(['roles'])
-            ->noRecordsFound(__("hailo::users.no_records_found"))
+            ->noRecordsFound(__('hailo::users.no_records_found'))
             ->addFilter('super_admin', function ($query) {
                 return $query->role('super-admin');
-            }, __("hailo::users.filter_super_admin"))
+            }, __('hailo::users.filter_super_admin'))
             ->addFilter('no_role', function ($query) {
                 return $query->doesntHave('roles');
-            }, __("hailo::users.filter_no_role"))
+            }, __('hailo::users.filter_no_role'))
             ->schema([
                 TextColumn::make('name')
                     ->label(__('hailo::users.field_label_name'))
@@ -203,6 +202,7 @@ class UserRepository
         $model->password = Hash::make($values['password']);
         $model->save();
         $model->syncRoles($values['rol']);
+
         return $model;
     }
 
@@ -210,11 +210,12 @@ class UserRepository
     {
         $model->name = $values['name'];
         $model->email = $values['email'];
-        if ($values['password'] and !empty($values['password'])) {
+        if ($values['password'] and ! empty($values['password'])) {
             $model->password = Hash::make($values['password']);
         }
         $model->save();
         $model->syncRoles($values['rol']);
+
         return $model;
     }
 
@@ -229,13 +230,13 @@ class UserRepository
             } else {
                 $value = $values[$preference];
             }
-            if (empty($value))
-            {
+            if (empty($value)) {
                 $value = $default;
             }
 
             $model->preferences()->updateOrCreate(['key' => $preference], ['value' => $value]);
         }
+
         return $model;
     }
 
@@ -243,6 +244,7 @@ class UserRepository
     {
         $model->password = Hash::make($values['password']);
         $model->save();
+
         return $model;
     }
 
@@ -253,11 +255,12 @@ class UserRepository
     {
         $user = config('hailo.users_model')::find($user_id);
         if ($user) {
-            if (!$user->delete()) {
-                throw new \Exception(__("hailo::users.not_deleted"));
-            };
+            if (! $user->delete()) {
+                throw new \Exception(__('hailo::users.not_deleted'));
+            }
+
             return true;
         }
-        throw new \Exception(__("hailo::users.not_found"));
+        throw new \Exception(__('hailo::users.not_found'));
     }
 }

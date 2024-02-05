@@ -10,7 +10,9 @@ use Livewire\Component;
 class SearchBar extends Component
 {
     public bool $show = true;
-    public string $q = "";
+
+    public string $q = '';
+
     protected $queryString = [
         'q' => ['except' => ''],
     ];
@@ -21,16 +23,16 @@ class SearchBar extends Component
 
     public function dehydrate()
     {
-        if (!empty($this->q)) {
+        if (! empty($this->q)) {
             $this->dispatch('searchUpdated', $this->q);
         }
     }
 
     /**
-     * @param $show
      * @return void
      */
-    #[NoReturn] public function toogle($show)
+    #[NoReturn]
+    public function toogle($show)
     {
         $this->show = $show;
     }
@@ -45,9 +47,9 @@ class SearchBar extends Component
         $this->dispatch('searchUpdated', $this->q);
     }
 
-    public function clear ()
+    public function clear()
     {
-        $this->q = "";
+        $this->q = '';
         $this->dispatch('searchUpdated', $this->q);
     }
 }

@@ -2,23 +2,25 @@
 
 namespace Pardalsalcap\Hailo\Forms\Traits;
 
-use Pardalsalcap\Hailo\Forms\Fields\FormField;
 use Pardalsalcap\Hailo\Forms\Form;
 use Pardalsalcap\Hailo\Helpers\Debug;
-use Exception;
+
 trait HasForms
 {
     protected array $forms = [];
+
     protected array $validation_errors = [];
+
     public array $formData = [];
 
-    public int|null $register_id = null;
+    public ?int $register_id = null;
 
     public bool $load = true;
 
     public function form(Form $form): Form
     {
         $this->forms[$form->getName()] = $form;
+
         return $this->getForm($form->getName());
     }
 
@@ -44,7 +46,7 @@ trait HasForms
                 if ($element instanceof \Pardalsalcap\Hailo\Forms\Section) {
                     $this->processFormElements($form, $element->getSchema());
                 } elseif ($element instanceof \Pardalsalcap\Hailo\Forms\Fields\FormField) {
-                    if($element->isRelation()){
+                    if ($element->isRelation()) {
                         $element->value($form->getModel()->{$element->getRelationName()});
                         if ($element->isRelationMultiple()) {
                             $this->addFormData($form->getName(), $element->getName(), $form->getModel()->{$element->getRelationName()}->pluck('id')->toArray());
@@ -53,19 +55,18 @@ trait HasForms
                             $this->addFormData($form->getName(), $element->getName(), $form->getModel()->{$element->getRelationName()}->first()?->{$element->getRelationDisplayField()} ?? '');
                         }
                     } elseif (empty($element->getValue()) and isset($form->getModel()->{$element->getName()}) and $element->getType() !== 'password') {
-                        if($element->getName()=='mode') { dd("****1"); }
+                        if ($element->getName() == 'mode') {
+                            dd('****1');
+                        }
                         $element->value($form->getModel()->{$element->getName()});
                         $this->addFormData($form->getName(), $element->getName(), $form->getModel()->{$element->getName()} ?? '');
                         //$this->formData[$element->getName()] = $form->getModel()->{$element->getName()} ?? '';
                     } else {
-                        if (!empty($element->getValue()))
-                        {
+                        if (! empty($element->getValue())) {
                             $element->value($element->getValue());
                             $this->addFormData($form->getName(), $element->getName(), $element->getValue());
-                        }
-                        else
-                        {
-                            $element->value($element->getValue()?? $element->getDefault() ?? '');
+                        } else {
+                            $element->value($element->getValue() ?? $element->getDefault() ?? '');
                             $this->addFormData($form->getName(), $element->getName(), $element->getDefault() ?? '');
                         }
                     }
@@ -85,9 +86,10 @@ trait HasForms
             if ($element instanceof \Pardalsalcap\Hailo\Forms\Section) {
                 $rules = array_merge($rules, $this->validationRules($form, $element->getSchema()));
             } elseif ($element instanceof \Pardalsalcap\Hailo\Forms\Fields\FormField) {
-                $rules['formData.' . $form->getName() . "." . $element->getName()] = $element->getRules($form);
+                $rules['formData.'.$form->getName().'.'.$element->getName()] = $element->getRules($form);
             }
         }
+
         return $rules;
     }
 
@@ -96,21 +98,18 @@ trait HasForms
         $this->validation_errors[$form_name] = $errors;
     }
 
-    public function getValidationErrors (): array
+    public function getValidationErrors(): array
     {
         return $this->validation_errors;
     }
 
-    public function handleFormException ($e, string $form_name, string $generic_error): void
+    public function handleFormException($e, string $form_name, string $generic_error): void
     {
         if ($e instanceof \Illuminate\Validation\ValidationException) {
             $this->addValidationErrors($form_name, $e->errors());
-        }
-        else
-        {
+        } else {
             $errors = [$generic_error];
-            if (Debug::debugStatus())
-            {
+            if (Debug::debugStatus()) {
                 $errors[] = $e->getMessage();
             }
             $this->addValidationErrors($form_name, $errors);

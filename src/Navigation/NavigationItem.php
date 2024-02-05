@@ -77,6 +77,7 @@ class NavigationItem
     {
         if (is_callable($active)) {
             $this->active = (bool) call_user_func($active);
+
             return $this;
         }
         $this->active = $active;
@@ -146,6 +147,7 @@ class NavigationItem
                 return true;
             }
         }
+
         return false;
     }
 }
