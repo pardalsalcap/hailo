@@ -18,18 +18,36 @@ class ProfilePersonalDataForm extends Component
 {
     use HasActions, HasForms;
 
+    protected UserRepository $repository;
     public string $user_form_title = "";
 
     public function mount(): void
     {
         $this->action = 'edit';
         $this->user_form_title = __('hailo::profile.user_form_title');
+        $this->repository = new UserRepository();
+        $this->loadForms();
     }
+
+    public function loadForms()
+    {
+        $this->form($this->repository->profile($this->loadModel()))
+            ->title($this->user_form_title);
+        $this->loadPreferences();
+    }
+
+    public function hydrate()
+    {
+        $this->repository = new UserRepository();
+        $this->loadForms();
+    }
+
+
     public function cancel(): void
     {
         $this->action = 'edit';
         $this->load = true;
-        $this->user_form_title = __('hailo::profile.user_form_title');
+        $this->loadForms();
     }
 
     public function update(): void
@@ -38,19 +56,14 @@ class ProfilePersonalDataForm extends Component
             DB::beginTransaction();
             $this->load = false;
             $user = $this->loadModel();
-            $this->form(UserRepository::profile($user));
-            $this->validate($this->validationRules($this->getForm('profile_form')));
-            UpdatePersonalData::run($this->getFormData('profile_form'), $user);
-            $this->cancel();
-            $this->dispatch('toast-success', ['title' => __('hailo::profile.saved')]);
-            $this->dispatch('profileUpdated');
-            $this->load = true;
+            $form = $this->form($this->repository->profile($user));
+            $this->validate($this->validationRules($form));
+            UpdatePersonalData::run($this->getFormData($form->getName()), $user);
+            $this->success();
             DB::commit();
         } catch (Throwable $e) {
             DB::rollBack();
-
-            $this->addValidationErrors('profile_form', $e->errors());
-            $this->clearValidation();
+            $this->handleFormException($e, $form->getName(), __('hailo::users.not_saved'));
         }
     }
 
@@ -59,29 +72,38 @@ class ProfilePersonalDataForm extends Component
         return auth()->user();
     }
 
-    public function render(): View|Factory
+    public function loadPreferences(): void
     {
-        $this->form(UserRepository::profile($this->loadModel()))
-            ->action('update')
-            ->title($this->user_form_title);
-        $this->processFormElements($this->getForm('profile_form'), $this->getForm('profile_form')->getSchema());
-
-        if ($this->load)
-        {
+        if ($this->load) {
             auth()->user()->load("preferences");
-            foreach(auth()->user()->preferences->pluck('value', 'key') as $key=>$value) {
+            foreach (auth()->user()->preferences->pluck('value', 'key') as $key => $value) {
                 $this->addFormData('profile_form', $key, $value);
             }
         }
-        else
-        {
-            //dd($this->formData);
-        }
+    }
 
-        return view('hailo::livewire.permissions.profile_personal', [
-            'profile_form' => $this->getForm('profile_form'),
-            'validation_errors' => $this->getValidationErrors()
-        ])
+
+    public function success(): void
+    {
+        $this->cancel();
+        $this->dispatch('toast-success', ['title' => __('hailo::profile.saved')]);
+        $this->dispatch('profileUpdated');
+    }
+
+    public function render(): View|Factory
+    {
+        $form = $this->form($this->repository->profile($this->loadModel()))
+            ->action('update')
+            ->title($this->user_form_title);
+        $this->processFormElements($form, $form->getSchema());
+
+        $this->loadPreferences();
+
+        return view('hailo::livewire.permissions.profile_personal',
+            [
+                'profile_form' => $this->getForm('profile_form'),
+                'validation_errors' => $this->getValidationErrors()
+            ])
             ->layout('hailo::layouts.main')
             ->title(__('hailo::profile.html_title', ['name' => config('app.name')]));
     }

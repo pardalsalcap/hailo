@@ -4,7 +4,8 @@ namespace Pardalsalcap\Hailo\Forms\Traits;
 
 use Pardalsalcap\Hailo\Forms\Fields\FormField;
 use Pardalsalcap\Hailo\Forms\Form;
-
+use Pardalsalcap\Hailo\Helpers\Debug;
+use Exception;
 trait HasForms
 {
     protected array $forms = [];
@@ -90,7 +91,7 @@ trait HasForms
         return $rules;
     }
 
-    public function addValidationErrors($form_name, $errors): void
+    public function addValidationErrors($form_name, array $errors): void
     {
         $this->validation_errors[$form_name] = $errors;
     }
@@ -98,5 +99,22 @@ trait HasForms
     public function getValidationErrors (): array
     {
         return $this->validation_errors;
+    }
+
+    public function handleFormException ($e, string $form_name, string $generic_error): void
+    {
+        if ($e instanceof \Illuminate\Validation\ValidationException) {
+            $this->addValidationErrors($form_name, $e->errors());
+        }
+        else
+        {
+            $errors = [$generic_error];
+            if (Debug::debugStatus())
+            {
+                $errors[] = $e->getMessage();
+            }
+            $this->addValidationErrors($form_name, $errors);
+        }
+        $this->clearValidation();
     }
 }

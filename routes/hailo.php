@@ -17,7 +17,6 @@ Route::middleware(['web'])
             ->name('login');
 
         Route::middleware([\Pardalsalcap\Hailo\Middleware\HailoAuthMiddleware::class, 'role:admin|super-admin'])->group(function () {
-
             Route::get('/', Dashboard::class)->name('dashboard');
             Route::get('/profile', ProfileApp::class)->name('profile');
             Route::get('/permissions/permissions', UsersApp::class)->name('permissions');

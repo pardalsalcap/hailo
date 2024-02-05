@@ -13,6 +13,6 @@ class AuthenticatedSessionController
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect(route('hailo.login'));
     }
 }

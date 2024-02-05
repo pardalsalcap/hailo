@@ -73,7 +73,7 @@ class UserRepository
     {
         return Form::make('profile_form', $user)
             ->livewire(true)
-            ->action('save')
+            ->action('update')
             ->name('profile_form')
             ->title(__('hailo::hailo.profile_personal_data_title'))
             ->button(__('hailo::hailo.save'))
@@ -90,7 +90,11 @@ class UserRepository
                             ->type('email')
                             ->label(__('hailo::profile.field_label_email'))
                             ->placeholder('example@example.com')
-                            ->required(),
+                            ->rules( [
+                                'required',
+                                'email',
+                                'unique:users,email,' . auth()->id()
+                            ]),
                     ]),
                 Section::make('preferences-section')
                     ->title(__("hailo::profile.profile_preferences_section"))
@@ -115,7 +119,7 @@ class UserRepository
     {
         return Form::make('security_form', $user)
             ->livewire(true)
-            ->action('save')
+            ->action('update')
             ->name('security_form')
             ->title(__('hailo::profile.profile_security_title'))
             ->button(__('hailo::profile.profile_security_save'))
@@ -232,6 +236,13 @@ class UserRepository
 
             $model->preferences()->updateOrCreate(['key' => $preference], ['value' => $value]);
         }
+        return $model;
+    }
+
+    public function updateSecurityData(array $values, Model $model): Model
+    {
+        $model->password = Hash::make($values['password']);
+        $model->save();
         return $model;
     }
 
