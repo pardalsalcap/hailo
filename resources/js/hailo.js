@@ -6,6 +6,7 @@ window.addEventListener('toast-success', event => {
 });
 
 window.addEventListener('toast-error', event => {
+    console.log(event.detail);
     launchToast(event.detail[0].title, 'error');
 });
 

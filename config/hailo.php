@@ -9,8 +9,11 @@ return [
     ],
     'navigation' => new \Pardalsalcap\Hailo\Repositories\NavigationRepository(),
     'users_model' => \Pardalsalcap\Hailo\Models\User::class,
-    'dashboard_widgets'=>[
-
-    ],
+    'dashboard'=>new \Pardalsalcap\Hailo\Repositories\DashboardRepository(),
+    'languages'=>[
+        'es' => 'Spanish',
+        'en' => 'English',
+        'ca' => 'Catalan',
+    ]
 
 ];

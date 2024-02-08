@@ -14,6 +14,11 @@
             ->withEntryPoints(['resources/css/hailo.css', 'resources/js/hailo.js']) }}
     @stack('styles')
 
+
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+    <script>
+        Dropzone.autoDiscover = false;
+    </script>
     <link
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"

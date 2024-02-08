@@ -8,11 +8,10 @@ use Pardalsalcap\Hailo\Forms\Traits\HasPlaceholder;
 use Pardalsalcap\Hailo\Forms\Traits\HasRelation;
 use Pardalsalcap\Hailo\Forms\Traits\HasType;
 use Pardalsalcap\Hailo\Forms\Traits\HasValidationRules;
-use Pardalsalcap\Hailo\Forms\Traits\IsTranslatable;
 
-class TextInput implements FormField
+class MediaInput implements FormField
 {
-    use HasDefault, HasLabel, HasPlaceholder, HasRelation, HasType, HasValidationRules, IsTranslatable;
+    use HasDefault, HasLabel, HasPlaceholder, HasRelation, HasType, HasValidationRules;
 
     protected string $name = '';
 
@@ -47,11 +46,6 @@ class TextInput implements FormField
     }
 
     public function getValue()
-    {
-        return $this->value;
-    }
-
-    public function getTranslation($iso)
     {
         return $this->value;
     }

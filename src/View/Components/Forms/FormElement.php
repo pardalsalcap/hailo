@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 use Pardalsalcap\Hailo\Forms\Fields\HiddenInput;
+use Pardalsalcap\Hailo\Forms\Fields\MediaInput;
 use Pardalsalcap\Hailo\Forms\Fields\SelectInput;
 use Pardalsalcap\Hailo\Forms\Fields\TextInput;
 use Pardalsalcap\Hailo\Forms\Section;
@@ -33,6 +34,8 @@ class FormElement extends Component
             return view('hailo::components.forms.select-input', ['input' => $this->element]);
         } elseif ($this->element instanceof HiddenInput) {
             return view('hailo::components.forms.hidden-input', ['input' => $this->element]);
+        } elseif ($this->element instanceof MediaInput) {
+            return view('hailo::components.forms.media-input', ['input' => $this->element]);
         }
 
         return null;

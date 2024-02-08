@@ -2,7 +2,7 @@
     <x-hailo::forms.label :input="$input" />
     <div class="mt-2">
         <input
-            wire:model="formData.{{ $input->getName() }}"
+            wire:model="formData.{{ $form->getName() }}.{{ $input->getName() }}"
             id="{{ $input->getName() }}"
             name="{{ $input->getName() }}"
             type="{{ $input->getType() }}"

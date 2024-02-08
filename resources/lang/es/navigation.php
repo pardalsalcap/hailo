@@ -6,5 +6,6 @@ return [
     'roles' => 'Roles',
     'maintenance' => 'Mantenimiento',
     'redirections' => 'Redirecciones',
+    'medias' => 'Multimedia',
 
 ];

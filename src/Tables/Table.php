@@ -5,9 +5,12 @@ namespace Pardalsalcap\Hailo\Tables;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Pardalsalcap\Hailo\Tables\Traits\HasCard;
 
 class Table
 {
+    use HasCard;
+
     protected array $schema = [];
 
     protected string $title = '';

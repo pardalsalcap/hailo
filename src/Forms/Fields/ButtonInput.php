@@ -2,7 +2,7 @@
 
 namespace Pardalsalcap\Hailo\Forms\Fields;
 
-class ButtonInput implements FormField
+class ButtonInput 
 {
     public function render(): string
     {

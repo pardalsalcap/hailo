@@ -11,6 +11,7 @@ use Pardalsalcap\Hailo\Livewire\Auth\Login;
 use Pardalsalcap\Hailo\Livewire\Auth\ResetApp;
 use Pardalsalcap\Hailo\Livewire\Dashboard\DashboardApp;
 use Pardalsalcap\Hailo\Livewire\Forms\FormHandler;
+use Pardalsalcap\Hailo\Livewire\Medias\MediasApp;
 use Pardalsalcap\Hailo\Livewire\Profile\ProfileApp;
 use Pardalsalcap\Hailo\Livewire\Profile\ProfileMenu;
 use Pardalsalcap\Hailo\Livewire\Profile\ProfilePersonalDataForm;
@@ -19,6 +20,7 @@ use Pardalsalcap\Hailo\Livewire\Search\SearchBar;
 use Pardalsalcap\Hailo\Livewire\Tables\TableHandler;
 use Pardalsalcap\Hailo\Livewire\Users\RolesApp;
 use Pardalsalcap\Hailo\Livewire\Users\UsersApp;
+use Pardalsalcap\Hailo\View\Components\Cards\MediaCard;
 use Pardalsalcap\Hailo\View\Components\Forms\Form;
 use Pardalsalcap\Hailo\View\Components\Forms\FormElement;
 use Pardalsalcap\Hailo\View\Components\NavigationItem;
@@ -45,6 +47,7 @@ class HailoServiceProvider extends PackageServiceProvider
             ->hasRoute('hailo')
             ->hasTranslations()
             ->hasMigration('create_user_preferences')
+            ->hasMigration('create_medias_table')
             ->hasViewComponent('hailo', NavigationItem::class)
             ->hasCommand(HailoCommand::class)
             ->hasCommand(HailoCreateUserCommand::class);
@@ -74,6 +77,8 @@ class HailoServiceProvider extends PackageServiceProvider
         Livewire::component('profile-security-form', ProfileSecurityForm::class);
         Livewire::component('profile-personal-form', ProfilePersonalDataForm::class);
 
+        Livewire::component('medias-app', MediasApp::class);
+
         Blade::component('hailo::navigation-item', NavigationItem::class);
         Blade::component('hailo::form-element', FormElement::class);
         Blade::component('hailo::form', Form::class);
@@ -81,6 +86,8 @@ class HailoServiceProvider extends PackageServiceProvider
         Blade::component('hailo::table-element', TableElement::class);
         Blade::component('hailo::row-actions', RowActions::class);
         Blade::component('hailo::table-widget', TableWidget::class);
+
+        Blade::component('hailo::media-card', MediaCard::class);
 
     }
 }
