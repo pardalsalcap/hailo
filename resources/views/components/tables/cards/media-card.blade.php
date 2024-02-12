@@ -2,10 +2,10 @@
     class="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]">
     <a href="{{ $media->getUrl() }}" target="_blank">
         @if ($media->is_image)
-
             <img
                 class="rounded-t-lg object-cover h-48 w-96"
-                src="{{ $media->getUrl() }}"
+                title="{{ $media->title }}"
+                src="{{ $media->getUrl('cms') }}"
                 alt="{{ $media->alt }}"/>
 
         @else
@@ -50,18 +50,19 @@
                 </div>
             </div>
             <p class="flex align-middle wrap truncate hover:text-clip">
-                Original: {{ $media->original }}
-                <br/>
+                <a class="clipboard" aria-label="copiado"  data-clipboard-text="{{ $media->getUrl() }}">
+                    @svg('copy', 'inline-block w-5 h-5 mr-1')
+                </a>
+                Original: <span class="truncate">{{ $media->original }}</span>
             </p>
         </div>
 
         <div class="group relative">
             <p class="flex align-middle">
-                URL: <span class="truncate">{{ $media->getUrl() }}</span>
-                <a class="clipboard" aria-label="copiado"  data-clipboard-text="{{ $media->getUrl() }}">
-                    @svg('copy', 'inline-block w-5 h-5 ml-1')
+                <a class="clipboard" aria-label="copiado"  data-clipboard-text="{{ $media->getUrl('webp') }}">
+                    @svg('copy', 'inline-block w-5 h-5 mr-1')
                 </a>
-                <br/>
+                URL: <span class="truncate">{{ $media->getUrl() }}</span>
             </p>
 
         </div>
@@ -74,7 +75,7 @@
             </p>
         @endif
         <p class="mb-4 flex align-middle @if ($media->weight>500000) text-hailo-600 @endif">
-            @svg('weight', 'inline-block w-5 h-5 mr-1') peso: {{ $media->weightToHuman() }}
+            @svg('info', 'inline-block w-5 h-5 mr-1') peso: {{ $media->weightToHuman() }}
         </p>
         <div class="table-actions">
             @if ($table->getHasEditAction())

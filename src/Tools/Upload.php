@@ -27,6 +27,7 @@ class Upload
     protected int $weight;
     protected int $width;
     protected int $height;
+    protected array $versions = [];
 
     protected array $exif =[];
 
@@ -74,16 +75,87 @@ class Upload
             $image = Image::read($this->disk['root'] . '/' . $this->path);
             $this->width = $image->width();
             $this->height = $image->height();
-            //$image->orientate();
             $this->exif = $image->exif()->toArray();
-            $encoded = $image->toWebp(60)->save($this->disk['root'] . '/' . $this->directory . '/' . $this->filename . '.webp');
+            //$image->toWebp(60)->save($this->disk['root'] . '/' . $this->directory . '/' . $this->filename . '.webp');
+            //$this->versions['webp'] = $this->directory . '/' . $this->filename . '.webp';
+            foreach(config('hailo.curations', []) as $class_name)
+            {
+                $curation = new $class_name;
+                $curation_path = $curation->setup($this->disk['root'] . '/' . $this->path, $this->extension, $this->directory, $this->filename, $this->disk_name)->generate();
+                $this->versions[$curation->id] = [
+                    'path' => $curation_path,
+                    'width' => $curation->getWidth(),
+                    'height' => $curation->getHeight(),
+                    'curator' => $class_name,
+                ];
+            }
         }
 
         $this->weight = $file->getSize();
+        //dd($this->result());
+
+        return $this->result();
+    }
+
+    public function makeReplaceFromFile($file, int $media_id, string $version=null): bool
+    {
+        $media = Media::find($media_id);
+
+        $this->setUpDisk($media->disk);
+
+        $this->original = $file->getClientOriginalName();
+        $this->extension = File::extension($this->original);
+        $this->mimetype = $file->getMimeType();
+        $this->filename = $this->uniqueFilename($file->getClientOriginalName(), $this->extension);
+        $this->directory = 'temp';
 
 
+        $this->path = Storage::disk($this->disk_name)->putFileAs($this->directory, $file, $this->filename);
+        if ($this->path) {
+            $this->filename = str_replace('.'.$this->extension, '', str_replace($this->directory . '/', '', $this->path));
+        }
+        else
+        {
+            throw new Exception('Error al subir el archivo');
+        }
 
+        if (!is_null($version))
+        {
+            $curations = config('hailo.curations', []);
+            if (isset($curations[$version]))
+            {
+                $curator = new $curations[$version]();
+                $cropped = $curator->setup($this->disk['root'] . '/temp/' . $this->filename.'.'.$this->extension, $media->extension, $media->directory, $media->filename, $media->disk)->generate();
+            }
+        }
+        if(Storage::disk($media->disk)->exists('/temp/'.$this->filename."." . $media->extension)){
+            Storage::disk($media->disk)->delete('/temp/'.$this->filename."." . $media->extension);
+        }
+        return true;
 
+        $this->width = 0;
+        $this->height = 0;
+        if ($this->isImage()) {
+            $image = Image::read($this->disk['root'] . '/' . $this->path);
+            $this->width = $image->width();
+            $this->height = $image->height();
+            $this->exif = $image->exif()->toArray();
+            //$image->toWebp(60)->save($this->disk['root'] . '/' . $this->directory . '/' . $this->filename . '.webp');
+            //$this->versions['webp'] = $this->directory . '/' . $this->filename . '.webp';
+            foreach(config('hailo.curations', []) as $class_name)
+            {
+                $curation = new $class_name;
+                $curation_path = $curation->setup($this->disk['root'] . '/' . $this->path, $this->extension, $this->directory, $this->filename, $this->disk_name)->generate();
+                $this->versions[$curation->id] = [
+                    'path' => $curation_path,
+                    'width' => $curation->getWidth(),
+                    'height' => $curation->getHeight(),
+                    'curator' => $class_name,
+                ];
+            }
+        }
+
+        $this->weight = $file->getSize();
         //dd($this->result());
 
         return $this->result();
@@ -105,6 +177,7 @@ class Upload
             'height' => $this->height,
             'url' => $this->path,
             'exif' => $this->exif,
+            'versions' => $this->versions,
         ];
     }
 

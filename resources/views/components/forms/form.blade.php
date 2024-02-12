@@ -11,6 +11,8 @@
             <x-hailo::form-element :form="$form" :element="$element"/>
         @endforeach
 
+        {{ $slot }}
+
         <x-hailo::form-validation :errors="$validation" />
 
         <div class="my-4 pt-4 border-t border-gray-200">

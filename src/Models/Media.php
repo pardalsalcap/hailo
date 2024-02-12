@@ -19,6 +19,7 @@ use Spatie\Translatable\HasTranslations;
  * @property string $mimetype
  * @property string $disk
  * @property string $directory
+ * @property string $filename
  * @property string $extension
  * @property string $url
  * @property integer $weight
@@ -43,7 +44,7 @@ class Media extends Model
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'visibility', 'status', 'title', 'alt', 'is_image', 'original', 'mimetype', 'disk', 'directory', 'extension', 'url', 'weight', 'height', 'width', 'metadata', 'versions', 'created_at', 'updated_at'];
+    protected $fillable = ['user_id', 'visibility', 'status', 'title', 'alt', 'is_image', 'original', 'mimetype', 'disk', 'directory', 'filename', 'extension', 'url', 'weight', 'height', 'width', 'metadata', 'versions', 'created_at', 'updated_at'];
 
     protected $casts=[
         'metadata' => 'array',
@@ -52,8 +53,17 @@ class Media extends Model
         'alt' => 'array',
     ];
 
-    public function getUrl ()
+    public function getUrl ($version = null)
     {
+        if ($version and $this->is_image and $this->versions and array_key_exists($version, $this->versions)) {
+            $path = $this->versions[$version];
+            return Storage::disk($this->disk)->url($path['path']);
+        }
+
+        if ($this->is_image and isset($this->versions['webp']) and !empty($this->versions['webp'])) {
+            return Storage::disk($this->disk)->url($this->versions['webp']['url']);
+        }
+
         return  Storage::disk($this->disk)->url($this->url);
     }
 

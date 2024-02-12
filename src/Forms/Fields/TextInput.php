@@ -9,10 +9,11 @@ use Pardalsalcap\Hailo\Forms\Traits\HasRelation;
 use Pardalsalcap\Hailo\Forms\Traits\HasType;
 use Pardalsalcap\Hailo\Forms\Traits\HasValidationRules;
 use Pardalsalcap\Hailo\Forms\Traits\IsTranslatable;
+use Pardalsalcap\Hailo\Forms\Traits\HasHelpText;
 
 class TextInput implements FormField
 {
-    use HasDefault, HasLabel, HasPlaceholder, HasRelation, HasType, HasValidationRules, IsTranslatable;
+    use HasDefault, HasLabel, HasPlaceholder, HasRelation, HasType, HasValidationRules, IsTranslatable, HasHelpText;
 
     protected string $name = '';
 

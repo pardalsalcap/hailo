@@ -19,7 +19,41 @@
     "lg:col-span-2"=>($action=='edit'),
 ])>
         @if ($action=='edit')
-            <x-hailo::form :validation="$validation_errors[$medias_form->getName()]??null" :form="$medias_form"/>
+            <x-hailo::form :validation="$validation_errors[$medias_form->getName()]??null" :form="$medias_form">
+                @if ($medias_form->getModel()->is_image)
+                    <h2 class="mt-8">{{ __("hailo::medias.crops_title") }}</h2>
+                    <p class="mt-2 text-sm text-gray-500">{{ __("hailo::medias.crops_text") }}</p>
+
+                    <div class="mt-8">
+                        <h3>
+                            {{ __("hailo::medias.version") }} original
+                        </h3>
+                        <p class="mb-2 text-sm text-gray-500">
+                            Esta es la imagen original que has cargado en el sistema. Esta imagen no se utilizará en ningún caso, es solo para que puedas ver la imagen original que has subido. Y gestionar las versiones que necesites.
+                        </p>
+                            <img src="{{ $medias_form->getModel()->getUrl() }}?t={{ time() }}" class="w-1/2 h-auto"/>
+                    </div>
+
+                    @foreach ($medias_form->getModel()->versions as $key=>$version)
+                        <div class="mt-8">
+                            <h3>
+                                {{ __("hailo::medias.version") }} {{ $key }}
+                            </h3>
+                            <p class="mb-2 text-sm text-gray-500">
+                                {{  $version['curator']::info() }}<br />
+                                {{ __("hailo::medias.version_text") }}
+                            </p>
+                            <a wire:click="crop({{ $medias_form->getModel()->id }}, '{{ $key }}')"  @click="scrollTo({top: 0, behavior: 'smooth'})"
+                               class="cursor-pointer text-blue-500 hover:text-blue-700">
+                                {{ __("hailo::medias.crop") }}
+                                <img src="{{ $medias_form->getModel()->getUrl($key) }}?t={{ time() }}"
+                                     class="w-1/2 h-auto"/>
+                            </a>
+                        </div>
+                    @endforeach
+                @endif
+            </x-hailo::form>
+            <livewire:crop-app/>
         @else
             <x-hailo::sections.form-container id="media_uploader" :title="$medias_form->getTitle()">
                 <div wire:ignore x-data x-init="function() {
@@ -30,7 +64,7 @@
                 let dropzone_multi_file_uploader_config = {
                     url: '{{ route("hailo.upload") }}',
                     paramName: 'file',
-                    maxFilesize: 100,
+                    maxFilesize: 10,
                     parallelUploads: 1,
                     dictDefaultMessage: '',
                     maxFiles: 10,
@@ -39,10 +73,10 @@
                     },
                     init: function () {
                         this.on('addedfile', function (file) {
-                            if(file.size > (1024 * 1024 * 5))
+                            if(file.size > (1024 * 1024 * 10))
                             {
-                                error_files = error_files + '<br/>'+file.name+'{{ __("hailo::medias.file_is_too_big", ["s"=>"10MB"])}}';
-                                this.removeFile(file);
+                                error_files = error_files + '<br/>'+file.name+'{{ __("hailo::medias.file_is_too_big", ["s"=>"10MB"])}} ('+humanFileSize(file.size)+')';
+                                //this.removeFile(file);
                             }
                         });
                         this.on('error', function (file, response) {
@@ -95,3 +129,8 @@
         @endif
     </div>
 </div>
+@push('styles')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.css"
+          integrity="sha512-bs9fAcCAeaDfA4A+NiShWR886eClUcBtqhipoY5DM60Y1V3BbVQlabthUBal5bq8Z8nnxxiyb1wfGX2n76N1Mw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+@endpush

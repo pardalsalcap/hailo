@@ -34,6 +34,7 @@ class MediasApp extends Component
         'searchUpdated' => 'search',
         'destroyMedia' => 'destroy',
         'addedMedia' => '$refresh',
+        'cropEnded' => '$refresh',
     ];
 
     protected $queryString = [
@@ -149,6 +150,11 @@ class MediasApp extends Component
         $this->q = $q;
         $this->cancel();
         $this->resetPage();
+    }
+
+    public function crop ($media_id, $version): void
+    {
+        $this->dispatch('initCrop', ["media_id"=>$media_id, 'version'=>$version ]);
     }
 
     public function render(): View|Factory

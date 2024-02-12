@@ -11,6 +11,7 @@ use Pardalsalcap\Hailo\Livewire\Auth\Login;
 use Pardalsalcap\Hailo\Livewire\Auth\ResetApp;
 use Pardalsalcap\Hailo\Livewire\Dashboard\DashboardApp;
 use Pardalsalcap\Hailo\Livewire\Forms\FormHandler;
+use Pardalsalcap\Hailo\Livewire\Medias\CropApp;
 use Pardalsalcap\Hailo\Livewire\Medias\MediasApp;
 use Pardalsalcap\Hailo\Livewire\Profile\ProfileApp;
 use Pardalsalcap\Hailo\Livewire\Profile\ProfileMenu;
@@ -71,6 +72,7 @@ class HailoServiceProvider extends PackageServiceProvider
         Livewire::component('permissions-app', UsersApp::class);
         Livewire::component('roles-app', RolesApp::class);
         Livewire::component('search-bar', SearchBar::class);
+        Livewire::component('crop-app', CropApp::class);
 
         Livewire::component('profile-menu', ProfileMenu::class);
         Livewire::component('profile-app', ProfileApp::class);

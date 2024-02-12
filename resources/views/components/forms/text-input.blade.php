@@ -2,6 +2,12 @@
 
 
     @if ($input->isTranslatable())
+        <h2>
+            {{ $input->getLabel() }}
+        </h2>
+        @if ($input->getHelp())
+            <p class="mt-2 text-sm text-gray-500">{{ $input->getHelp() }}</p>
+        @endif
         @foreach(config('hailo.languages') as $iso=>$language)
             <div class="mt-2">
                 <label for="{{ $input->getName() }}_{{ $iso }}" class="block text-sm font-medium leading-6 text-gray-400">
