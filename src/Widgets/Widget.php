@@ -2,12 +2,18 @@
 
 namespace Pardalsalcap\Hailo\Widgets;
 
-use Closure;
 use Pardalsalcap\Hailo\Tables\Table;
 
 class Widget
 {
-    protected string $name, $id, $route="", $type;
+    protected string $name;
+
+    protected string $id;
+
+    protected string $route = '';
+
+    protected string $type;
+
     protected Table $table;
 
     public static function make(string $name): self
@@ -47,7 +53,6 @@ class Widget
         return $this;
     }
 
-
     public function getName(): string
     {
         return $this->name;
@@ -72,7 +77,6 @@ class Widget
     {
         return $this->table;
     }
-
 
     public function toArray(): array
     {

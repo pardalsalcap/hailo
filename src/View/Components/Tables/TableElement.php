@@ -26,8 +26,7 @@ class TableElement extends Component
 
         if ($this->element instanceof TextColumn) {
             return view('hailo::components.tables.text-column', ['column' => $this->element, 'model' => $this->model]);
-        }
-        elseif ($this->element instanceof MediaColumn) {
+        } elseif ($this->element instanceof MediaColumn) {
             return view('hailo::components.tables.media-column', ['column' => $this->element, 'model' => $this->model]);
         }
 

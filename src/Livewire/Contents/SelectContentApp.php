@@ -2,15 +2,11 @@
 
 namespace Pardalsalcap\Hailo\Livewire\Contents;
 
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
-
 use Pardalsalcap\Hailo\Models\Content;
-use Pardalsalcap\Hailo\Models\Media;
 use Pardalsalcap\Hailo\Repositories\ContentRepository;
-use Pardalsalcap\Hailo\Repositories\MediaRepository;
 use Pardalsalcap\Hailo\Tables\Traits\HasTables;
 
 class SelectContentApp extends Component
@@ -18,12 +14,19 @@ class SelectContentApp extends Component
     use HasTables;
 
     public bool $show = false;
+
     public string $input = '';
+
     public int $content_id;
+
     public array $selected = [];
+
     public string $form;
+
     public string $type;
+
     public string $mode;
+
     protected ContentRepository $repository;
 
     protected $listeners = [
@@ -49,26 +52,23 @@ class SelectContentApp extends Component
         $this->type = $type;
         $this->mode = $mode;
 
-        if ($this->mode === 'single'){
-            $this->selected = [(int)$current];
-        }
-        else{
+        if ($this->mode === 'single') {
+            $this->selected = [(int) $current];
+        } else {
             $this->selected = $current;
         }
         //{type: 'image', input: '{{ $input->getName() }}', form: '{{ $form->getName() }}', mode: 'single'}
         //dd($type, $input, $form, $mode, $current, $this->selected);
     }
 
-    public function select (int $content_id)
+    public function select(int $content_id)
     {
-        if($this->mode === 'single'){
+        if ($this->mode === 'single') {
             $this->selected = [$content_id];
-        }
-        else{
-            if (in_array($content_id, $this->selected)){
+        } else {
+            if (in_array($content_id, $this->selected)) {
                 $this->selected = array_diff($this->selected, [$content_id]);
-            }
-            else{
+            } else {
                 $this->selected[] = $content_id;
             }
         }
@@ -95,11 +95,9 @@ class SelectContentApp extends Component
     public function render(): View|Factory
     {
         $table = null;
-        if ($this->show)
-        {
+        if ($this->show) {
 
-            if (!empty($this->type))
-            {
+            if (! empty($this->type)) {
                 $table = $this->table('contents_table', (new ContentRepository())->table(new Content()))
                     ->sortBy($this->sort_by)
                     ->sortDirection($this->sort_direction)
@@ -107,9 +105,7 @@ class SelectContentApp extends Component
                     ->filterBy('filter_'.$this->type)
                     ->perPage(16)
                     ->executeQuery();
-            }
-            else
-            {
+            } else {
                 $table = $this->table('contents_table', (new ContentRepository())->table(new Content()))
                     ->sortBy($this->sort_by)
                     ->sortDirection($this->sort_direction)
@@ -121,7 +117,7 @@ class SelectContentApp extends Component
         }
 
         return view('hailo::livewire.contents.select', [
-            "contents_table" => $table,
+            'contents_table' => $table,
         ]);
     }
 }

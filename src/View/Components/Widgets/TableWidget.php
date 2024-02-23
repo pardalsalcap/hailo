@@ -11,6 +11,7 @@ use Pardalsalcap\Hailo\Widgets\Widget;
 class TableWidget extends Component
 {
     public Table $table;
+
     /**
      * Create a new component instance.
      */

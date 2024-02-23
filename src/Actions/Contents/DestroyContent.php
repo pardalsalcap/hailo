@@ -5,7 +5,6 @@ namespace Pardalsalcap\Hailo\Actions\Contents;
 use Exception;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Pardalsalcap\Hailo\Repositories\ContentRepository;
-use Pardalsalcap\Hailo\Repositories\RoleRepository;
 
 class DestroyContent
 {

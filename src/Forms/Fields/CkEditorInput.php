@@ -3,17 +3,17 @@
 namespace Pardalsalcap\Hailo\Forms\Fields;
 
 use Pardalsalcap\Hailo\Forms\Traits\HasDefault;
+use Pardalsalcap\Hailo\Forms\Traits\HasHelpText;
 use Pardalsalcap\Hailo\Forms\Traits\HasLabel;
 use Pardalsalcap\Hailo\Forms\Traits\HasPlaceholder;
 use Pardalsalcap\Hailo\Forms\Traits\HasRelation;
 use Pardalsalcap\Hailo\Forms\Traits\HasType;
 use Pardalsalcap\Hailo\Forms\Traits\HasValidationRules;
 use Pardalsalcap\Hailo\Forms\Traits\IsTranslatable;
-use Pardalsalcap\Hailo\Forms\Traits\HasHelpText;
 
 class CkEditorInput implements FormField
 {
-    use HasDefault, HasLabel, HasPlaceholder, HasRelation, HasType, HasValidationRules, IsTranslatable, HasHelpText;
+    use HasDefault, HasHelpText, HasLabel, HasPlaceholder, HasRelation, HasType, HasValidationRules, IsTranslatable;
 
     protected string $name = '';
 

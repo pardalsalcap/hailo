@@ -2,7 +2,7 @@
 
 namespace Pardalsalcap\Hailo\Forms\Fields;
 
-class ButtonInput 
+class ButtonInput
 {
     public function render(): string
     {

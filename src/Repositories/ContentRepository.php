@@ -15,7 +15,6 @@ use Pardalsalcap\Hailo\Forms\Fields\ToggleInput;
 use Pardalsalcap\Hailo\Forms\Form;
 use Pardalsalcap\Hailo\Forms\Section;
 use Pardalsalcap\Hailo\Models\Content;
-use Pardalsalcap\Hailo\Models\Media;
 use Pardalsalcap\Hailo\Tables\Columns\TextColumn;
 use Pardalsalcap\Hailo\Tables\Table;
 
@@ -32,7 +31,7 @@ class ContentRepository
                 Section::make('main_section')
                     ->columns(5)
                     ->schema([
-                        Section::make("main_content")
+                        Section::make('main_content')
                             ->colSpan(4)
                             ->title(__('hailo::content.main_section_title'))
                             ->schema([SelectInput::make('lang')
@@ -45,9 +44,10 @@ class ContentRepository
                                 SelectInput::make('parent_id')
                                     ->blur()
                                     ->options(function ($formData) {
-                                        if (!isset($formData['lang'])) {
+                                        if (! isset($formData['lang'])) {
                                             return [];
                                         }
+
                                         return Content::where('lang', $formData['lang'])->get()->pluck('title', 'id')->toArray();
                                     })
                                     ->label(__('hailo::content.field_label_parent_id'))
@@ -77,8 +77,7 @@ class ContentRepository
                                             ->label(__('hailo::content.field_label_related_content'))
                                             ->type('home')
                                             ->relation('related', 'title', true, false, 'related', true)
-                                            ->placeholder(__('hailo::content.field_label_related_content'))
-                                        ,
+                                            ->placeholder(__('hailo::content.field_label_related_content')),
                                     ]),
 
                                 Section::make('image_featured_section')
@@ -87,8 +86,7 @@ class ContentRepository
                                         MediaSingleInput::make('featured_image_id')
                                             ->label(__('hailo::content.field_label_featured_image_id'))
                                             ->type('image')
-                                            ->placeholder(__('hailo::content.field_label_featured_image_id'))
-                                            ,
+                                            ->placeholder(__('hailo::content.field_label_featured_image_id')),
                                     ]),
                                 Section::make('download_featured_section')
                                     ->title(__('hailo::content.download_featured_section_title'))
@@ -96,12 +94,8 @@ class ContentRepository
                                         MediaSingleInput::make('featured_download_id')
                                             ->label(__('hailo::content.field_label_featured_download_id'))
                                             ->type('download')
-                                            ->placeholder(__('hailo::content.field_label_featured_download_id'))
-                                            ,
+                                            ->placeholder(__('hailo::content.field_label_featured_download_id')),
                                     ]),
-
-
-
 
                                 Section::make('image_gallery')
                                     ->title(__('hailo::content.image_gallery_section_title'))
@@ -110,8 +104,7 @@ class ContentRepository
                                             ->label(__('hailo::content.field_label_image_gallery'))
                                             ->type('image')
                                             ->relation('imageGallery', 'title', true, true, 'image_gallery', true)
-                                            ->placeholder(__('hailo::content.field_label_featured_image_id'))
-                                            ,
+                                            ->placeholder(__('hailo::content.field_label_featured_image_id')),
                                     ]),
 
                                 Section::make('download_gallery')
@@ -121,11 +114,9 @@ class ContentRepository
                                             ->label(__('hailo::content.field_label_download_gallery'))
                                             ->type('download')
                                             ->relation('dwnGallery', 'title', true, true, 'download_gallery', true)
-                                            ->placeholder(__('hailo::content.field_label_download_gallery'))
-                                        ,
+                                            ->placeholder(__('hailo::content.field_label_download_gallery')),
 
                                     ]),
-
 
                                 TextInput::make('meta_title')
                                     ->label(__('hailo::content.field_label_meta_title'))
@@ -173,16 +164,17 @@ class ContentRepository
                     if ($form->getModel()->id) {
                         return [
                             'required',
-                            'unique:contents,seo_url,' . $form->getModel()->id,
+                            'unique:contents,seo_url,'.$form->getModel()->id,
                         ];
                     }
+
                     return [
                         'required',
                         'unique:contents,seo_url',
                     ];
                 }),
             SeoGoogle::make('google')
-                ->label(__('hailo::content.field_label_seo_google'))
+                ->label(__('hailo::content.field_label_seo_google')),
         ];
     }
 
@@ -192,10 +184,10 @@ class ContentRepository
             ->title(__('hailo::content.table_title'))
             ->perPage(25)
             ->addFilter('lang_es', function ($query) {
-                return $query->where("lang", "es");
+                return $query->where('lang', 'es');
             }, __('hailo::content.filter_lang_es'))
             ->addFilter('filter_home', function ($query) {
-                return $query->where("type", "home");
+                return $query->where('type', 'home');
             }, __('hailo::content.filter_home'))
             ->hasEditAction(true)
             ->hasDeleteAction(true)
@@ -224,49 +216,47 @@ class ContentRepository
         foreach ($values as $key => $value) {
             $content->contentMetas()->updateOrCreate([
                 'content_id' => $content->id,
-                'key' => $key
+                'key' => $key,
             ], [
                 'content_id' => $content->id,
                 'key' => $key,
-                'value' => $value
+                'value' => $value,
             ]);
         }
+
         return true;
     }
 
-    public function storeRelations (Content $content, array $relations, array $values): bool
+    public function storeRelations(Content $content, array $relations, array $values): bool
     {
         if (count($relations) > 0) {
             foreach ($relations as $relation) {
                 if ($relation['is_content_media']) {
-                    $data = $values[$relation['field_name']] ;
-                    $data=array_values($data);
+                    $data = $values[$relation['field_name']];
+                    $data = array_values($data);
                     if (empty($data)) {
                         $data = [];
                     }
                     $arr = [];
-                    foreach ($data as $index=>$id)
-                    {
-                        $arr[$id]= ['position' => $index+1, 'type' => $relation['content_media_type']];
+                    foreach ($data as $index => $id) {
+                        $arr[$id] = ['position' => $index + 1, 'type' => $relation['content_media_type']];
                     }
                     $content->{$relation['relation']}()->sync($arr);
-                }
-                else
-                {
-                    $data = $values[$relation['field_name']] ;
-                    $data=array_values($data);
+                } else {
+                    $data = $values[$relation['field_name']];
+                    $data = array_values($data);
                     if (empty($data)) {
                         $data = [];
                     }
                     $arr = [];
-                    foreach ($data as $index=>$id)
-                    {
-                        $arr[$id]= ['position' => $index+1, 'type' => $relation['content_media_type']];
+                    foreach ($data as $index => $id) {
+                        $arr[$id] = ['position' => $index + 1, 'type' => $relation['content_media_type']];
                     }
                     $content->{$relation['relation']}()->sync($arr);
                 }
             }
         }
+
         return true;
     }
 
@@ -302,7 +292,7 @@ class ContentRepository
     {
         $content = Content::find($content_id);
         if ($content) {
-            if (!$content->delete()) {
+            if (! $content->delete()) {
                 throw new \Exception(__('hailo::contents.not_deleted'));
             }
 

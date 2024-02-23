@@ -4,14 +4,10 @@ namespace Pardalsalcap\Hailo\View\Components\Forms\Cards;
 
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\View\Component;
 use Pardalsalcap\Hailo\Forms\Fields\FormField;
 use Pardalsalcap\Hailo\Forms\Form;
 use Pardalsalcap\Hailo\Models\Content;
-use Pardalsalcap\Hailo\Models\Media;
-use Pardalsalcap\Hailo\Tables\Columns\MediaColumn;
-use Pardalsalcap\Hailo\Tables\Columns\TextColumn;
 
 class ContentCard extends Component
 {

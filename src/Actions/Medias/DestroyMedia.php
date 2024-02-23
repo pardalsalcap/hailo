@@ -5,7 +5,6 @@ namespace Pardalsalcap\Hailo\Actions\Medias;
 use Exception;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Pardalsalcap\Hailo\Repositories\MediaRepository;
-use Pardalsalcap\Hailo\Repositories\RoleRepository;
 
 class DestroyMedia
 {

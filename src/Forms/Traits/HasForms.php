@@ -52,14 +52,12 @@ trait HasForms
                     $this->processFormElements($form, $element->getSchema());
                 } elseif ($element instanceof \Pardalsalcap\Hailo\Forms\Fields\FormField) {
 
-                    if (in_array(IsTranslatable::class, array_keys((new \ReflectionClass($element))->getTraits())) and $element->isTranslatable())
-                    {
-                        foreach (config('hailo.languages') as $iso=>$language) {
+                    if (in_array(IsTranslatable::class, array_keys((new \ReflectionClass($element))->getTraits())) and $element->isTranslatable()) {
+                        foreach (config('hailo.languages') as $iso => $language) {
                             $element->value($form->getModel()->getTranslation($element->getName(), $iso, true));
                             $this->addFormData($form->getName(), $element->getName().'_'.$iso, $form->getModel()->getTranslation($element->getName(), $iso, false));
                         }
-                    }
-                    else{
+                    } else {
                         if ($element->isRelation()) {
                             $element->value($form->getModel()->{$element->getRelationName()});
                             if ($element->isRelationMultiple()) {
@@ -102,13 +100,11 @@ trait HasForms
             if ($element instanceof \Pardalsalcap\Hailo\Forms\Section) {
                 $rules = array_merge($rules, $this->validationRules($form, $element->getSchema()));
             } elseif ($element instanceof \Pardalsalcap\Hailo\Forms\Fields\FormField) {
-                if (in_array(IsTranslatable::class, array_keys((new \ReflectionClass($element))->getTraits())) and $element->isTranslatable())
-                {
-                    foreach (config('hailo.languages') as $iso=>$language) {
+                if (in_array(IsTranslatable::class, array_keys((new \ReflectionClass($element))->getTraits())) and $element->isTranslatable()) {
+                    foreach (config('hailo.languages') as $iso => $language) {
                         $rules['formData.'.$form->getName().'.'.$element->getName().'_'.$iso] = $element->getRules($form);
                     }
-                }
-                else{
+                } else {
                     $rules['formData.'.$form->getName().'.'.$element->getName()] = $element->getRules($form);
                 }
 
@@ -154,7 +150,7 @@ trait HasForms
                 $relations = array_merge($relations, $this->relationalFields($form, $element->getSchema()));
             } elseif ($element instanceof \Pardalsalcap\Hailo\Forms\Fields\FormField and $element->isRelation()) {
                 $relations['formData.'.$form->getName().'.'.$element->getName()] = [
-                    'field_name'=>$element->getName(),
+                    'field_name' => $element->getName(),
                     'relation' => $element->getRelationName(),
                     'multiple' => $element->isRelationMultiple(),
                     'display_field' => $element->getRelationDisplayField(),

@@ -1,6 +1,7 @@
 <?php
 
 namespace Pardalsalcap\Hailo\Tools\Curations;
+
 use Pardalsalcap\Hailo\Tools\Curation;
 
 class CmsThumbnail extends Curation
@@ -17,11 +18,12 @@ class CmsThumbnail extends Curation
         $this->disk_name = $disk_name;
         $this->format = 'webp';
         $this->mode = 'exact';
+
         return $this;
     }
 
-    public static function info ()
+    public static function info()
     {
-        return __("hailo::medias.curation_cms_information");
+        return __('hailo::medias.curation_cms_information');
     }
 }

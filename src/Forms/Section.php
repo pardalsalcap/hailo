@@ -14,7 +14,7 @@ class Section
 
     protected int $columns = 1;
 
-    protected int $colSpan =1;
+    protected int $colSpan = 1;
 
     public function __construct(string $name)
     {

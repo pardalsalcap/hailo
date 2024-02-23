@@ -24,6 +24,6 @@ class Form extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('hailo::components.forms.form', ['form' => $this->form, "data" => $this->data, "validation" => $this->validation]);
+        return view('hailo::components.forms.form', ['form' => $this->form, 'data' => $this->data, 'validation' => $this->validation]);
     }
 }

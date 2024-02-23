@@ -48,5 +48,4 @@ class Widgets
     {
         return self::$columns;
     }
-
 }

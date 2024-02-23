@@ -4,11 +4,8 @@ namespace Pardalsalcap\Hailo\View\Components\Cards;
 
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\View\Component;
 use Pardalsalcap\Hailo\Models\Media;
-use Pardalsalcap\Hailo\Tables\Columns\MediaColumn;
-use Pardalsalcap\Hailo\Tables\Columns\TextColumn;
 
 class MediaSelectCard extends Component
 {

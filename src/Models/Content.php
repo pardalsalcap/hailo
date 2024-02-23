@@ -8,16 +8,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Pardalsalcap\Hailo\Traits\ContentTrait;
 
 /**
- * @property integer $id
- * @property integer $parent_id
- * @property integer $user_id
- * @property integer $translation_id
- * @property integer $featured_image_id
- * @property integer $featured_download_id
+ * @property int $id
+ * @property int $parent_id
+ * @property int $user_id
+ * @property int $translation_id
+ * @property int $featured_image_id
+ * @property int $featured_download_id
  * @property string $type
  * @property string $template
- * @property integer $position
- * @property boolean $status
+ * @property int $position
+ * @property bool $status
  * @property string $lang
  * @property string $title
  * @property string $claim
@@ -78,49 +78,31 @@ class Content extends Model
         'created_at',
         'updated_at'];
 
-    /**
-     * @return HasMany
-     */
     public function contentMetas(): HasMany
     {
         return $this->hasMany(ContentMeta::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function featuredDownload(): BelongsTo
     {
         return $this->belongsTo(Media::class, 'featured_download_id');
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function featuredImage(): BelongsTo
     {
         return $this->belongsTo(Media::class, 'featured_image_id');
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function parent(): BelongsTo
     {
         return $this->belongsTo(Content::class, 'parent_id');
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function translation(): BelongsTo
     {
         return $this->belongsTo(Content::class, 'translation_id');
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo('App\Models\User');
@@ -150,5 +132,4 @@ class Content extends Model
             ->wherePivot('type', '=', 'related') // Filtrar solo por tipo 'image_gallery'
             ->orderBy('pivot_position'); // Ordenar por el campo 'position'
     }
-
 }

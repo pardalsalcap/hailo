@@ -6,7 +6,6 @@ use Exception;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Pardalsalcap\Hailo\Models\Media;
 use Pardalsalcap\Hailo\Repositories\MediaRepository;
-use Pardalsalcap\Hailo\Repositories\RoleRepository;
 
 class RenameMedia
 {

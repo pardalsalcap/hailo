@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property integer $id
- * @property integer $content_id
+ * @property int $id
+ * @property int $content_id
  * @property string $key
  * @property string $value
  * @property Content $content
@@ -26,9 +26,6 @@ class ContentMeta extends Model
      */
     protected $fillable = ['content_id', 'key', 'value'];
 
-    /**
-     * @return BelongsTo
-     */
     public function content(): BelongsTo
     {
         return $this->belongsTo('App\Models\Content');

@@ -2,40 +2,32 @@
 
 namespace Pardalsalcap\Hailo\Livewire\Medias;
 
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Intervention\Image\Laravel\Facades\Image;
 use Livewire\Component;
-use Pardalsalcap\Hailo\Actions\Medias\DestroyMedia;
-use Pardalsalcap\Hailo\Actions\Medias\UpdateMedia;
-use Pardalsalcap\Hailo\Actions\Roles\DestroyRole;
-use Pardalsalcap\Hailo\Actions\Roles\StoreRole;
-use Pardalsalcap\Hailo\Actions\Roles\UpdateRole;
-use Pardalsalcap\Hailo\Forms\Traits\HasForms;
 use Pardalsalcap\Hailo\Models\Media;
 use Pardalsalcap\Hailo\Repositories\MediaRepository;
-use Pardalsalcap\Hailo\Tables\Traits\CanDelete;
-use Pardalsalcap\Hailo\Tables\Traits\HasActions;
 use Pardalsalcap\Hailo\Tables\Traits\HasTables;
-use Spatie\Permission\Models\Role;
-use Throwable;
 
 class SelectMediaApp extends Component
 {
     use HasTables;
 
     public bool $show = false;
+
     public string $input = '';
+
     public int $media_id;
+
     public array $selected = [];
+
     public string $form;
+
     public string $type;
+
     public string $mode;
+
     protected MediaRepository $repository;
 
     protected $listeners = [
@@ -60,26 +52,23 @@ class SelectMediaApp extends Component
         $this->type = $type;
         $this->mode = $mode;
 
-        if ($this->mode === 'single'){
-            $this->selected = [(int)$current];
-        }
-        else{
+        if ($this->mode === 'single') {
+            $this->selected = [(int) $current];
+        } else {
             $this->selected = $current;
         }
         //{type: 'image', input: '{{ $input->getName() }}', form: '{{ $form->getName() }}', mode: 'single'}
         //dd($type, $input, $form, $mode, $current, $this->selected);
     }
 
-    public function select (int $media_id)
+    public function select(int $media_id)
     {
-        if($this->mode === 'single'){
+        if ($this->mode === 'single') {
             $this->selected = [$media_id];
-        }
-        else{
-            if (in_array($media_id, $this->selected)){
+        } else {
+            if (in_array($media_id, $this->selected)) {
                 $this->selected = array_diff($this->selected, [$media_id]);
-            }
-            else{
+            } else {
                 $this->selected[] = $media_id;
             }
         }
@@ -106,10 +95,8 @@ class SelectMediaApp extends Component
     public function render(): View|Factory
     {
         $table = null;
-        if ($this->show)
-        {
-            if ($this->type == 'image')
-            {
+        if ($this->show) {
+            if ($this->type == 'image') {
                 $table = $this->table('medias_table', (new MediaRepository())->table(new Media()))
                     ->sortBy($this->sort_by)
                     ->sortDirection($this->sort_direction)
@@ -117,9 +104,7 @@ class SelectMediaApp extends Component
                     ->filterBy('images_only')
                     ->perPage(16)
                     ->executeQuery();
-            }
-            elseif ($this->type == 'download')
-            {
+            } elseif ($this->type == 'download') {
                 $table = $this->table('medias_table', (new MediaRepository())->table(new Media()))
                     ->sortBy($this->sort_by)
                     ->sortDirection($this->sort_direction)
@@ -127,9 +112,7 @@ class SelectMediaApp extends Component
                     ->filterBy('downloads_only')
                     ->perPage(16)
                     ->executeQuery();
-            }
-            else
-            {
+            } else {
                 $table = $this->table('medias_table', (new MediaRepository())->table(new Media()))
                     ->sortBy($this->sort_by)
                     ->sortDirection($this->sort_direction)
@@ -141,7 +124,7 @@ class SelectMediaApp extends Component
         }
 
         return view('hailo::livewire.medias.select', [
-            "medias_table" => $table,
+            'medias_table' => $table,
         ]);
     }
 }

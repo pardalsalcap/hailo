@@ -1,6 +1,7 @@
 <?php
 
 namespace Pardalsalcap\Hailo\Tools\Curations;
+
 use Pardalsalcap\Hailo\Tools\Curation;
 
 class MaxResolution extends Curation
@@ -17,11 +18,12 @@ class MaxResolution extends Curation
         $this->disk_name = $disk_name;
         $this->format = 'webp';
         $this->mode = 'proportional';
+
         return $this;
     }
 
-    public static function info ()
+    public static function info()
     {
-        return __("hailo::medias.curation_max_information");
+        return __('hailo::medias.curation_max_information');
     }
 }

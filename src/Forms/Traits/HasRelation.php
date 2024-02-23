@@ -14,11 +14,11 @@ trait HasRelation
 
     protected bool $is_content_media = true;
 
-    protected string|null $content_media_type = null;
+    protected ?string $content_media_type = null;
 
     protected bool $content_media_keep_position = false;
 
-    public function relation(string $relationName, string $relationDisplayField, bool $relationIsMultiple = false, bool $is_content_media = false, string|null $content_media_type = null, bool $content_media_keep_position=false): self
+    public function relation(string $relationName, string $relationDisplayField, bool $relationIsMultiple = false, bool $is_content_media = false, ?string $content_media_type = null, bool $content_media_keep_position = false): self
     {
         if (! empty($relationName)) {
             $this->relationName = $relationName;
@@ -58,7 +58,7 @@ trait HasRelation
         return $this->is_content_media;
     }
 
-    public function getContentMediaType(): string|null
+    public function getContentMediaType(): ?string
     {
         return $this->content_media_type;
     }

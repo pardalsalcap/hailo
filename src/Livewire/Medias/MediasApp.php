@@ -10,16 +10,12 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Pardalsalcap\Hailo\Actions\Medias\DestroyMedia;
 use Pardalsalcap\Hailo\Actions\Medias\UpdateMedia;
-use Pardalsalcap\Hailo\Actions\Roles\DestroyRole;
-use Pardalsalcap\Hailo\Actions\Roles\StoreRole;
-use Pardalsalcap\Hailo\Actions\Roles\UpdateRole;
 use Pardalsalcap\Hailo\Forms\Traits\HasForms;
 use Pardalsalcap\Hailo\Models\Media;
 use Pardalsalcap\Hailo\Repositories\MediaRepository;
 use Pardalsalcap\Hailo\Tables\Traits\CanDelete;
 use Pardalsalcap\Hailo\Tables\Traits\HasActions;
 use Pardalsalcap\Hailo\Tables\Traits\HasTables;
-use Spatie\Permission\Models\Role;
 use Throwable;
 
 class MediasApp extends Component
@@ -41,7 +37,7 @@ class MediasApp extends Component
         'sort_by' => ['except' => 'id', 'as' => 'sort_by'],
         'sort_direction' => ['except' => ['ASC', 'null'], 'as' => 'sort_direction'],
         'q' => ['except' => ''],
-        'register_id'=> ['except' => [null, 'null']],
+        'register_id' => ['except' => [null, 'null']],
         'action' => ['except' => 'index'],
     ];
 
@@ -138,7 +134,7 @@ class MediasApp extends Component
                 $this->cancel();
                 $this->dispatch('toast-error', ['title' => __('hailo::medias.not_found')]);
             } else {
-                $this->medias_form_title = __('hailo::medias.media_form_title_edit', ['u' => $media->title? $media->title : $media->id]);
+                $this->medias_form_title = __('hailo::medias.media_form_title_edit', ['u' => $media->title ? $media->title : $media->id]);
 
                 return $media;
             }
@@ -154,9 +150,9 @@ class MediasApp extends Component
         $this->resetPage();
     }
 
-    public function crop ($media_id, $version): void
+    public function crop($media_id, $version): void
     {
-        $this->dispatch('initCrop', ["media_id"=>$media_id, 'version'=>$version ]);
+        $this->dispatch('initCrop', ['media_id' => $media_id, 'version' => $version]);
     }
 
     public function render(): View|Factory
@@ -174,6 +170,7 @@ class MediasApp extends Component
             ->title($this->medias_form_title);
 
         $this->processFormElements($form, $form->getSchema());
+
         //if ($this->action == 'edit') {dd($this->getFormData($form->getName()), $form->getModel());}
         return view('hailo::livewire.medias.app', [
             'medias_table' => $this->getTable('medias_table'),

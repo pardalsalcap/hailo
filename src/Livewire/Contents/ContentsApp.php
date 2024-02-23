@@ -97,7 +97,7 @@ class ContentsApp extends Component
             $this->dispatch('toast-success', ['title' => __('hailo::content.deleted')]);
             $this->deleting_id = null;
         } catch (Exception $e) {
-            $this->dispatch('toast-error', ['title' => __('hailo::content.not_deleted') . ':<br /> ' . $e->getMessage()]);
+            $this->dispatch('toast-error', ['title' => __('hailo::content.not_deleted').':<br /> '.$e->getMessage()]);
         }
     }
 
@@ -167,7 +167,7 @@ class ContentsApp extends Component
     {
         $data = $this->getFormData($form->getName());
         if (isset($data['seo_url'])) {
-            $data['seo_url'] = str_replace(config('app.url'), "", (new Content())->setUrl($data));
+            $data['seo_url'] = str_replace(config('app.url'), '', (new Content())->setUrl($data));
             $this->addFormData($form->getName(), 'seo_url', $data['seo_url']);
         }
         if (isset($data['parent_id']) and empty($data['parent_id'])) {
@@ -181,6 +181,7 @@ class ContentsApp extends Component
         foreach ($this->metas as $key => $value) {
             $result[$value] = $values[$key] ?? '';
         }
+
         return $result;
     }
 
@@ -190,16 +191,13 @@ class ContentsApp extends Component
         $this->dispatch('toast-success', ['title' => __('hailo::content.saved')]);
     }
 
-    public function updateMediaOrder ($data)
+    public function updateMediaOrder($data)
     {
         $groups = [];
-        foreach ($data as $group)
-        {
+        foreach ($data as $group) {
             $groups[$group['value']] = [];
-            if (isset($group['items']))
-            {
-                foreach ($group['items'] as $item)
-                {
+            if (isset($group['items'])) {
+                foreach ($group['items'] as $item) {
                     $groups[$group['value']][] = $item['value'];
                 }
             }
@@ -207,8 +205,7 @@ class ContentsApp extends Component
 
         $form = $this->form($this->repository->form($this->loadModel()));
 
-        foreach ($groups as $key => $value)
-        {
+        foreach ($groups as $key => $value) {
             $this->addFormData($form->getName(), $key, $value);
         }
     }
@@ -217,10 +214,10 @@ class ContentsApp extends Component
     {
         if ($this->action == 'edit') {
             $relations = collect($this->relationalFields($this->repository->form(new Content())));
-            $relations = $relations->pluck("relation")->push('contentMetas');
+            $relations = $relations->pluck('relation')->push('contentMetas');
 
             $content = Content::with($relations->toArray())->find($this->register_id);
-            if (!$content) {
+            if (! $content) {
                 $this->cancel();
                 $this->dispatch('toast-error', ['title' => __('hailo::content.not_found')]);
             } else {
@@ -236,7 +233,7 @@ class ContentsApp extends Component
     public function toggle($field, $form)
     {
         $current_value = $this->getFormDataField($form, $field);
-        $this->addFormData($form, $field, !$current_value);
+        $this->addFormData($form, $field, ! $current_value);
     }
 
     public function addMedia($media_ids, $input, $form, $mode)
@@ -260,9 +257,7 @@ class ContentsApp extends Component
     {
         if ($data['mode'] == 'single') {
             $this->addFormData($data['form'], $data['input'], $data['selected'][0]);
-        }
-        elseif ($data['mode']=='multiple')
-        {
+        } elseif ($data['mode'] == 'multiple') {
             $current = [];
             foreach ($data['selected'] as $media_id) {
                 $current[] = $media_id;
@@ -277,9 +272,7 @@ class ContentsApp extends Component
     {
         if ($data['mode'] == 'single') {
             $this->addFormData($data['form'], $data['input'], $data['selected'][0]);
-        }
-        elseif ($data['mode']=='multiple')
-        {
+        } elseif ($data['mode'] == 'multiple') {
             $current = [];
             foreach ($data['selected'] as $content_id) {
                 $current[] = $content_id;
@@ -292,12 +285,9 @@ class ContentsApp extends Component
 
     public function removeMedia($id, $input, $form, $mode)
     {
-        if ($mode=='single')
-        {
+        if ($mode == 'single') {
             $this->addFormData($form, $input, null);
-        }
-        elseif ($mode == 'multiple')
-        {
+        } elseif ($mode == 'multiple') {
             $current = $this->getFormDataField($form, $input);
             if (empty($current)) {
                 $current = [];
@@ -311,12 +301,9 @@ class ContentsApp extends Component
 
     public function removeContent($id, $input, $form, $mode)
     {
-        if ($mode=='single')
-        {
+        if ($mode == 'single') {
             $this->addFormData($form, $input, null);
-        }
-        elseif ($mode == 'multiple')
-        {
+        } elseif ($mode == 'multiple') {
             $current = $this->getFormDataField($form, $input);
             if (empty($current)) {
                 $current = [];
@@ -327,8 +314,6 @@ class ContentsApp extends Component
             $this->addFormData($form, $input, $current);
         }
     }
-
-
 
     public function search($q): void
     {
@@ -348,7 +333,6 @@ class ContentsApp extends Component
             ->perPage(8)
             ->executeQuery();
 
-
         $form = $this->form($this->repository->form($this->loadModel()))
             ->action($this->action == 'edit' ? 'update' : 'store')
             ->title($this->form_title);
@@ -367,7 +351,7 @@ class ContentsApp extends Component
         if ($this->action == 'edit' or $this->action == 'create') {
             $check = $this->getFormData($form->getName());
             if (isset($check['seo_url'])) {
-                if (!empty($check['seo_slug'])) {
+                if (! empty($check['seo_slug'])) {
                     $this->addFormData($form->getName(), 'seo_slug', Str::slug($check['seo_slug']));
                     $check = $this->getFormData($form->getName());
                 }

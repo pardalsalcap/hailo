@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Pardalsalcap\Hailo\Models\Content;
 use Pardalsalcap\Hailo\Repositories\ContentRepository;
-use Pardalsalcap\Hailo\Repositories\RoleRepository;
-use Spatie\Permission\Models\Role;
 
 class UpdateContent
 {

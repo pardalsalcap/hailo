@@ -9,13 +9,11 @@ use Pardalsalcap\Hailo\Actions\Medias\RenameMedia;
 use Pardalsalcap\Hailo\Forms\Fields\TextInput;
 use Pardalsalcap\Hailo\Forms\Form;
 use Pardalsalcap\Hailo\Forms\Section;
+use Pardalsalcap\Hailo\Models\Media;
 use Pardalsalcap\Hailo\Tables\Columns\MediaColumn;
 use Pardalsalcap\Hailo\Tables\Columns\TextColumn;
 use Pardalsalcap\Hailo\Tables\Table;
 use Pardalsalcap\Hailo\Tools\Upload;
-use Spatie\Permission\Models\Role;
-use Pardalsalcap\Hailo\Models\Media;
-
 
 class MediaRepository
 {
@@ -51,7 +49,6 @@ class MediaRepository
 
             ]);
     }
-
 
     public static function table(Model $media): Table
     {
@@ -114,13 +111,13 @@ class MediaRepository
     public function update(array $values, Model $model): Model
     {
         foreach (config('hailo.languages') as $iso => $language) {
-            $model->setTranslation('title', $iso, $values['title_' . $iso]);
+            $model->setTranslation('title', $iso, $values['title_'.$iso]);
         }
         foreach (config('hailo.languages') as $iso => $language) {
-            $model->setTranslation('alt', $iso, $values['alt_' . $iso]);
+            $model->setTranslation('alt', $iso, $values['alt_'.$iso]);
         }
 
-        if ($model->filename <> $values['filename']) {
+        if ($model->filename != $values['filename']) {
 
             $model = RenameMedia::run($model, $values['filename']);
         }
@@ -132,7 +129,7 @@ class MediaRepository
 
     public function rename(Media $media, string $new_filename): Media
     {
-        $new_url = $media->directory . '/' . $new_filename . '.' . $media->extension;
+        $new_url = $media->directory.'/'.$new_filename.'.'.$media->extension;
         $new_versions = [];
         // Check if a file with the new name already exists
         if (Storage::disk($media->disk)->exists($new_url)) {
@@ -143,16 +140,16 @@ class MediaRepository
             throw new \Exception(__('hailo::medias.url_exists'));
         }
         // Rename the file
-        if (!Storage::disk($media->disk)->move($media->url, $new_url)) {
+        if (! Storage::disk($media->disk)->move($media->url, $new_url)) {
             throw new \Exception(__('hailo::medias.not_renamed'));
         }
         $media->url = $new_url;
         // Rename the versions
         if ($media->versions) {
-            foreach ($media->versions as $key=>$version) {
+            foreach ($media->versions as $key => $version) {
                 $new_version = $version;
-                $new_version['path']=str_replace($media->filename, $new_filename, $version['path']);
-                if (!Storage::disk($media->disk)->move($version['path'], $new_version['path'])) {
+                $new_version['path'] = str_replace($media->filename, $new_filename, $version['path']);
+                if (! Storage::disk($media->disk)->move($version['path'], $new_version['path'])) {
                     throw new \Exception(__('hailo::medias.not_renamed'));
                 }
                 $new_versions[$key] = $new_version;
@@ -174,23 +171,23 @@ class MediaRepository
         $media = Media::find($media_id);
         if ($media) {
             if (Storage::disk($media->disk)->exists($media->url)) {
-                if (!Storage::disk($media->disk)->delete($media->url)) {
+                if (! Storage::disk($media->disk)->delete($media->url)) {
                     throw new \Exception(__('hailo::medias.not_deleted'));
                 }
             }
 
-            if (!empty($media->versions)) {
+            if (! empty($media->versions)) {
                 foreach ($media->versions as $version) {
                     $version_path = $version['path'];
                     if (Storage::disk($media->disk)->exists($version_path)) {
-                        if (!Storage::disk($media->disk)->delete($version_path)) {
+                        if (! Storage::disk($media->disk)->delete($version_path)) {
                             throw new \Exception(__('hailo::medias.not_deleted'));
                         }
                     }
                 }
             }
 
-            if (!$media->delete()) {
+            if (! $media->delete()) {
                 throw new \Exception(__('hailo::medias.not_deleted'));
             }
 
@@ -205,10 +202,10 @@ class MediaRepository
         $action = $request->get('action');
         $media_id = $request->get('media_id');
         $version = $request->get('version');
-        if ($action == 'replace')
-        {
+        if ($action == 'replace') {
             return $uploader->makeReplaceFromFile($request->file('file'), $media_id, $version);
         }
+
         return $uploader->makeUploadFromFile($request->file('file'));
     }
 }
