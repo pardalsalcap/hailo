@@ -333,7 +333,6 @@ class ContentsApp extends Component
             ->perPage(8)
             ->executeQuery();
 
-
         $form = $this->form($this->repository->form($this->loadModel()))
             ->action($this->action == 'edit' ? 'update' : 'store')
             ->title($this->form_title);

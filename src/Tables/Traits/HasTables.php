@@ -18,6 +18,7 @@ trait HasTables
     public string $q = '';
 
     public string $filter = 'all';
+
     public array $filters = ['all'];
 
     public function table($name, Table $table): Table

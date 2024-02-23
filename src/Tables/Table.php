@@ -48,6 +48,7 @@ class Table
     protected string $filters_layout = 'tabs';
 
     protected string $currentFilter = 'all';
+
     protected array $currentFilters = [];
 
     protected array $relations = [];
@@ -161,14 +162,12 @@ class Table
 
     public function filterBy(string|array $filter): self
     {
-        if (is_array ($filter))
-        {
+        if (is_array($filter)) {
             $this->currentFilters = $filter;
-        }
-        else
-        {
+        } else {
             $this->currentFilter = $filter;
         }
+
         return $this;
     }
 
@@ -265,8 +264,7 @@ class Table
 
     public function hasFilters(): bool
     {
-        if(count($this->filters)==0)
-        {
+        if (count($this->filters) == 0) {
             return false;
         }
         $count = 0;
@@ -275,6 +273,7 @@ class Table
                 $count++;
             }
         }
+
         return $count > 0;
     }
 
@@ -373,8 +372,7 @@ class Table
             })
             ->when(! empty($this->currentFilters) and $this->currentFilters !== ['all'], function ($query) {
                 foreach ($this->currentFilters as $filter) {
-                    if ($filter !== 'all')
-                    {
+                    if ($filter !== 'all') {
                         $query->where($this->filters[$filter]['filter']);
                     }
 
