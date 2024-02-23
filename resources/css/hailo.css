@@ -70,7 +70,7 @@ h2:where(.swal2-title)
 }
 
 .form-section {
-    @apply mt-16 first:mt-0;
+    @apply mt-16 mb-8 first:mt-0;
 }
 h1{
     @apply text-sm font-bold text-gray-900 font-serif text-2xl;
