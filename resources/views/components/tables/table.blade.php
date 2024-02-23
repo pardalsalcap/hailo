@@ -1,5 +1,5 @@
 <x-hailo::sections.table-container :id="$table->getName()" :title="$table->getTitle()">
-    @if ($table->hasFilters())
+    @if ($table->hasFilters() and $table->getFiltersLayout() == 'tabs')
         <div>
             <div class="sm:hidden">
                 <label for="tabs" class="sr-only">Select a tab</label>
@@ -26,14 +26,16 @@
                         </button>
                         <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
                         @foreach ($table->getFilters() as $filter)
-                            <button wire:click="filterBy('{{ $filter['name'] }}')" href="#"
-                                @class([
-                                'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium',
-                                'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'=> $table->getCurrentFilter() != $filter['name'],
-                                'border-hailo-600 text-hailo-600' => $table->getCurrentFilter() === $filter['name'],
-                           ])>
-                                {{ $filter['label'] }}
-                            </button>
+                            @if($filter['at_filters'] === true)
+                                <button wire:click="filterBy('{{ $filter['name'] }}')" href="#"
+                                    @class([
+                                    'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium',
+                                    'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'=> $table->getCurrentFilter() != $filter['name'],
+                                    'border-hailo-600 text-hailo-600' => $table->getCurrentFilter() === $filter['name'],
+                               ])>
+                                    {{ $filter['label'] }}
+                                </button>
+                            @endif
                         @endforeach
                     </nav>
                 </div>

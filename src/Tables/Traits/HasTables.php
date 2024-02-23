@@ -18,6 +18,7 @@ trait HasTables
     public string $q = '';
 
     public string $filter = 'all';
+    public array $filters = ['all'];
 
     public function table($name, Table $table): Table
     {
@@ -50,7 +51,22 @@ trait HasTables
 
     public function filterBy(string $filter): void
     {
-        $this->filter = $filter;
+        //$this->filter = $filter;
+        if ($filter === 'all') {
+            $this->filters = ['all'];
+        } else {
+            // check if the filter is in the array, if it's not in the array and add it, if is in the array remove it
+            if (($key = array_search($filter, $this->filters)) !== false) {
+                unset($this->filters[$key]);
+            } else {
+                $this->filters = array_merge($this->filters, [$filter]);
+            }
+            // if the array is empty, add the all filter
+            if (empty($this->filters)) {
+                $this->filters = ['all'];
+            }
+        }
+
         $this->resetPage();
     }
 }

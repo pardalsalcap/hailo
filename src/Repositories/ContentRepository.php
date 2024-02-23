@@ -188,7 +188,8 @@ class ContentRepository
             }, __('hailo::content.filter_lang_es'))
             ->addFilter('filter_home', function ($query) {
                 return $query->where('type', 'home');
-            }, __('hailo::content.filter_home'))
+            }, __('hailo::content.filter_home'), true)
+            ->filterLayout('sidebar')
             ->hasEditAction(true)
             ->hasDeleteAction(true)
             ->noRecordsFound(__('hailo::content.no_records_found'))

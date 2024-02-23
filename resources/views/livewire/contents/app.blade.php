@@ -37,13 +37,39 @@
                         </div>
                     </div>
                 </section>
+                @if ($contents_table->hasFilters() and $contents_table->getFiltersLayout()=='sidebar')
+                    <section id="create-content-box" class="form-container mt-8">
+                        <h1>{{ __("hailo::content.filters_section_title") }}</h1>
+                        <div class="bg-white p-8 rounded-b-xl border-t-2 border-hailo-400">
+                            <nav class="space-y-2" aria-label="Tabs">
+                                <button wire:click="filterBy('all')" href="#"
+                                    @class([
+                                        'block w-full text-left whitespace-nowrap border-b py-4 px-1 text-sm font-medium border-gray-300',
+                                        'text-gray-500 hover:border-hailo-600 hover:text-gray-700'=> ($contents_table->getCurrentFilter() != 'all' and $contents_table->getCurrentFilters() != ['all']),
+                                        'border-hailo-600 text-hailo-600' => $contents_table->getCurrentFilter() === 'all' and $contents_table->getCurrentFilters() === ['all'],
+                                    ])
+                                >
+                                    {{ __('hailo::hailo.all') }}
+                                </button>
+                                <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
+                                @foreach ($contents_table->getFilters() as $filter)
+                                    @if($filter['at_filters'] === true)
+                                        <button wire:click="filterBy('{{ $filter['name'] }}')" href="#"
+                                            @class([
+                                            'block w-full text-left whitespace-nowrap border-b py-4 px-1 text-sm font-medium border-gray-300',
+                                            'text-gray-500 hover:border-hailo-600 hover:text-gray-700'=> $contents_table->getCurrentFilter() != $filter['name'] and !in_array($filter['name'], $contents_table->getCurrentFilters()),
+                                            'border-hailo-600 text-hailo-600' => $contents_table->getCurrentFilter() === $filter['name'] or in_array($filter['name'], $contents_table->getCurrentFilters()),
+                                       ])>
+                                            {{ $filter['label'] }}
+                                        </button>
+                                    @endif
+                                @endforeach
+                            </nav>
 
-                <section id="create-content-box" class="form-container mt-8">
-                    <h1>{{ __("hailo::content.filters_section_title") }}</h1>
-                    <div class="bg-white p-8 rounded-b-xl border-t-2 border-hailo-400">
-                        filters
-                    </div>
-                </section>
+                        </div>
+
+                    </section>
+                @endif
             </div>
         </div>
     @elseif ($action=='edit')
@@ -62,9 +88,6 @@
     @endif
 
     @if ($action=='edit' or $action=='create')
-        <script>
-            //CKEDITOR.replace('content_form[content]');
-        </script>
         @push('scripts')
             <script src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.16.1/ckeditor.js"></script>
         @endpush

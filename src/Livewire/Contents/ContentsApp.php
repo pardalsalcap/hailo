@@ -14,7 +14,6 @@ use Pardalsalcap\Hailo\Actions\Contents\StoreContent;
 use Pardalsalcap\Hailo\Actions\Contents\StoreContentMetas;
 use Pardalsalcap\Hailo\Actions\Contents\StoreContentRelations;
 use Pardalsalcap\Hailo\Actions\Contents\UpdateContent;
-use Pardalsalcap\Hailo\Forms\Form;
 use Pardalsalcap\Hailo\Forms\Traits\HasForms;
 use Pardalsalcap\Hailo\Models\Content;
 use Pardalsalcap\Hailo\Repositories\ContentRepository;
@@ -54,6 +53,7 @@ class ContentsApp extends Component
         'content_type' => ['except' => 'page', 'as' => 'type'],
         'register_id' => ['except' => [null, 'null']],
         'filter' => ['except' => 'all'],
+        'filters' => ['except' => 'all'],
     ];
 
     public function mount(): void
@@ -329,9 +329,10 @@ class ContentsApp extends Component
             ->sortBy($this->sort_by)
             ->sortDirection($this->sort_direction)
             ->search($this->q)
-            ->filterBy($this->filter)
+            ->filterBy($this->filters)
             ->perPage(8)
             ->executeQuery();
+
 
         $form = $this->form($this->repository->form($this->loadModel()))
             ->action($this->action == 'edit' ? 'update' : 'store')

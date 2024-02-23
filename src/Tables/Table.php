@@ -45,7 +45,10 @@ class Table
 
     protected array $filters = [];
 
+    protected string $filters_layout = 'tabs';
+
     protected string $currentFilter = 'all';
+    protected array $currentFilters = [];
 
     protected array $relations = [];
 
@@ -144,20 +147,34 @@ class Table
         return $this;
     }
 
-    public function addFilter($name, Closure $filter, $label): self
+    public function addFilter($name, Closure $filter, $label, $at_filters = true): self
     {
         $this->filters[$name] = [
             'name' => $name,
             'filter' => $filter,
             'label' => $label,
+            'at_filters' => $at_filters,
         ];
 
         return $this;
     }
 
-    public function filterBy(string $filter): self
+    public function filterBy(string|array $filter): self
     {
-        $this->currentFilter = $filter;
+        if (is_array ($filter))
+        {
+            $this->currentFilters = $filter;
+        }
+        else
+        {
+            $this->currentFilter = $filter;
+        }
+        return $this;
+    }
+
+    public function filterLayout(string $layout): self
+    {
+        $this->filters_layout = $layout;
 
         return $this;
     }
@@ -241,9 +258,29 @@ class Table
         return $this->currentFilter;
     }
 
+    public function getCurrentFilters(): array
+    {
+        return $this->currentFilters;
+    }
+
     public function hasFilters(): bool
     {
-        return count($this->filters) > 0;
+        if(count($this->filters)==0)
+        {
+            return false;
+        }
+        $count = 0;
+        foreach ($this->filters as $filter) {
+            if ($filter['at_filters']) {
+                $count++;
+            }
+        }
+        return $count > 0;
+    }
+
+    public function getFiltersLayout(): string
+    {
+        return $this->filters_layout;
     }
 
     public function getPaginationAppends(): array
@@ -333,6 +370,16 @@ class Table
             })
             ->when(! empty($this->currentFilter) and $this->currentFilter !== 'all', function ($query) {
                 $query->where($this->filters[$this->currentFilter]['filter']);
+            })
+            ->when(! empty($this->currentFilters) and $this->currentFilters !== ['all'], function ($query) {
+                foreach ($this->currentFilters as $filter) {
+                    if ($filter !== 'all')
+                    {
+                        $query->where($this->filters[$filter]['filter']);
+                    }
+
+                }
+                //$query->where($this->filters[$this->currentFilter]['filter']);
             })
             ->select($this->fields())
             ->orderBy($this->sortField, $this->sortDirection)
