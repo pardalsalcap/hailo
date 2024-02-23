@@ -32,4 +32,5 @@ return [
 
     // Generic messages that are use as defaults
     'no_records_found' => 'No se han encontrado registros',
+    'dropzone_message' => 'Arrastra tus ficheros a esta zona o haz click aquí para cargar un fichero desde tu ordenador',
 ];

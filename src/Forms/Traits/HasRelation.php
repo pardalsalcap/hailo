@@ -12,13 +12,22 @@ trait HasRelation
 
     protected bool $relationIsMultiple = false;
 
-    public function relation(string $relationName, string $relationDisplayField, bool $relationIsMultiple = false): self
+    protected bool $is_content_media = true;
+
+    protected string|null $content_media_type = null;
+
+    protected bool $content_media_keep_position = false;
+
+    public function relation(string $relationName, string $relationDisplayField, bool $relationIsMultiple = false, bool $is_content_media = false, string|null $content_media_type = null, bool $content_media_keep_position=false): self
     {
         if (! empty($relationName)) {
             $this->relationName = $relationName;
             $this->isRelation = true;
             $this->relationDisplayField = $relationDisplayField;
             $this->relationIsMultiple = $relationIsMultiple;
+            $this->is_content_media = $is_content_media;
+            $this->content_media_type = $content_media_type;
+            $this->content_media_keep_position = $content_media_keep_position;
         }
 
         return $this;
@@ -42,5 +51,20 @@ trait HasRelation
     public function getRelationDisplayField(): string
     {
         return $this->relationDisplayField;
+    }
+
+    public function isContentMedia(): bool
+    {
+        return $this->is_content_media;
+    }
+
+    public function getContentMediaType(): string|null
+    {
+        return $this->content_media_type;
+    }
+
+    public function getContentMediaKeepPosition(): bool
+    {
+        return $this->content_media_keep_position;
     }
 }

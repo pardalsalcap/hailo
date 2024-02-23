@@ -1,1 +1,1 @@
-<x-hailo::form :validation="$validation_errors[$security_form->getName()]??null" :form="$security_form"/>
+<x-hailo::form :data="$formData[$security_form->getName()]" :validation="$validation_errors[$security_form->getName()]??null" :form="$security_form"/>

@@ -9,6 +9,6 @@
    ""=>($action=='index'),
     "lg:col-span-2"=>($action=='edit'),
 ])>
-        <x-hailo::form :validation="$validation_errors[$role_form->getName()]??null" :form="$role_form"/>
+        <x-hailo::form  :data="$formData[$role_form->getName()]" :validation="$validation_errors[$role_form->getName()]??null" :form="$role_form"/>
     </div>
 </div>

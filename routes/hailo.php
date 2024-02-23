@@ -6,6 +6,7 @@ use Pardalsalcap\Hailo\Http\Controllers\UploadController;
 use Pardalsalcap\Hailo\Livewire\Auth\ForgotApp;
 use Pardalsalcap\Hailo\Livewire\Auth\Login;
 use Pardalsalcap\Hailo\Livewire\Auth\ResetApp;
+use Pardalsalcap\Hailo\Livewire\Contents\ContentsApp;
 use Pardalsalcap\Hailo\Livewire\Dashboard\DashboardApp;
 use Pardalsalcap\Hailo\Livewire\Medias\MediasApp;
 use Pardalsalcap\Hailo\Livewire\Profile\ProfileApp;
@@ -32,6 +33,7 @@ Route::middleware(['web'])
 
         Route::middleware([\Pardalsalcap\Hailo\Middleware\HailoAuthMiddleware::class, 'role:admin|super-admin'])->group(function () {
             Route::get('/', DashboardApp::class)->name('dashboard');
+            Route::get('/contents', ContentsApp::class)->name('contents');
             Route::get('/media', MediasApp::class)->name('medias');
             Route::get('/profile', ProfileApp::class)->name('profile');
             Route::get('/permissions/permissions', UsersApp::class)->name('permissions');

@@ -2,11 +2,14 @@
     <x-hailo::forms.label :input="$input" />
     <div
         class="mt-2"
-        wire:ignore
         >
-
         <select
-            wire:model="formData.{{ $form->getName() }}.{{ $input->getName() }}"
+            @if ($input->hasBlur())
+                wire:model.blur="formData.{{ $form->getName() }}.{{ $input->getName() }}"
+            @else
+                wire:model="formData.{{ $form->getName() }}.{{ $input->getName() }}"
+            @endif
+
             x-ref="{{ $input->getName() }}"
             id="{{ $input->getName() }}"
             name="{{ $input->getName() }}"
@@ -17,7 +20,8 @@
             @if ($input->getNullOption())
                 <option value="">{{ __("hailo::hailo.select_one_option") }}</option>
             @endif
-            @foreach ($input->getOptions() as $value => $label)
+
+            @foreach ($input->getOptions($data) as $value => $label)
                 <option value="{{ $value }}">{{ $label }}</option>
             @endforeach
         </select>

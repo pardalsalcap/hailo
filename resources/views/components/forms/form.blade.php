@@ -4,16 +4,24 @@
             wire:submit="{{ $form->getAction() }}"
         @else
             action="{{ $form->getAction() }}"
-            method="{{ $form->getMethod() }}"
+        method="{{ $form->getMethod() }}"
         @endif
-        >
-        @foreach($form->getSchema() as $element)
-            <x-hailo::form-element :form="$form" :element="$element"/>
-        @endforeach
+    >
+        <div wire:sortable-group="updateMediaOrder">
+
+            @foreach($form->getSchema() as $element)
+                <x-hailo::form-element :data="$data" :form="$form" :element="$element"/>
+            @endforeach
+
+        </div>
+
+
+
+
 
         {{ $slot }}
 
-        <x-hailo::form-validation :errors="$validation" />
+        <x-hailo::form-validation :errors="$validation"/>
 
         <div class="my-4 pt-4 border-t border-gray-200">
             <button class="primary" type="submit">{{ $form->getButton() }}</button>

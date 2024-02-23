@@ -1,0 +1,40 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('content_media', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('content_id')->unsigned()->references('id')->on('contents');
+            $table->bigInteger('media_id')->unsigned()->references('id')->on('medias');
+            $table->string('type', 16);
+            $table->integer('position')->unsigned()->nullable();
+            $table->json('config')->nullable();
+
+            $table->foreign('content_id')->references('id')->on('contents')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreign('media_id')->references('id')->on('medias')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->index('type');
+            $table->index('position');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('content_media');
+    }
+};

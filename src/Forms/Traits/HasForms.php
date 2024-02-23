@@ -39,6 +39,11 @@ trait HasForms
         return $this->formData[$form_name];
     }
 
+    public function getFormDataField($form_name, $form_field)
+    {
+        return $this->formData[$form_name][$form_field];
+    }
+
     protected function processFormElements(Form $form, array $elements): void
     {
         if ($this->load) {
@@ -135,5 +140,31 @@ trait HasForms
             $this->addValidationErrors($form_name, $errors);
         }
         $this->clearValidation();
+    }
+
+    public function relationalFields(Form $form, $elements = null): array
+    {
+        $relations = [];
+        if (is_null($elements)) {
+            $elements = $form->getSchema();
+        }
+
+        foreach ($elements as $element) {
+            if ($element instanceof \Pardalsalcap\Hailo\Forms\Section) {
+                $relations = array_merge($relations, $this->relationalFields($form, $element->getSchema()));
+            } elseif ($element instanceof \Pardalsalcap\Hailo\Forms\Fields\FormField and $element->isRelation()) {
+                $relations['formData.'.$form->getName().'.'.$element->getName()] = [
+                    'field_name'=>$element->getName(),
+                    'relation' => $element->getRelationName(),
+                    'multiple' => $element->isRelationMultiple(),
+                    'display_field' => $element->getRelationDisplayField(),
+                    'is_content_media' => $element->isContentMedia(),
+                    'content_media_type' => $element->getContentMediaType(),
+                    'content_media_keep_position' => $element->getContentMediaKeepPosition(),
+                ];
+            }
+        }
+
+        return $relations;
     }
 }

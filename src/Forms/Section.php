@@ -14,6 +14,8 @@ class Section
 
     protected int $columns = 1;
 
+    protected int $colSpan =1;
+
     public function __construct(string $name)
     {
         $this->name = $name;
@@ -53,6 +55,13 @@ class Section
         return $this;
     }
 
+    public function colSpan(int $colSpan): self
+    {
+        $this->colSpan = $colSpan;
+
+        return $this;
+    }
+
     public function getSchema(): array
     {
         return $this->schema;
@@ -76,6 +85,11 @@ class Section
     public function getColumns(): int
     {
         return $this->columns;
+    }
+
+    public function getColSpan(): int
+    {
+        return $this->colSpan;
     }
 
     public function toArray()

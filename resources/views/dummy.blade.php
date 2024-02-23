@@ -1,3 +1,12 @@
 <div class="grid grid-cols-2"></div>
 <div class="grid grid-cols-3"></div>
+<div class="grid grid-cols-4"></div>
+<div class="grid grid-cols-5"></div>
+<div class="grid grid-cols-6"></div>
 <td class="hidden md:table-cell sm:table-cell text-green-600"></td>
+<div class="col-span-1"></div>
+<div class="col-span-2"></div>
+<div class="col-span-3"></div>
+<div class="col-span-4"></div>
+<div class="col-span-5"></div>
+<div class="col-span-6"></div>

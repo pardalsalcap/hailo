@@ -289,11 +289,11 @@ class Table
     {
         $fields = [];
         foreach ($this->schema as $field) {
-            if (! $field->isRelation()) {
+            if (!$field->isRelation()) {
                 $fields[] = $field->getName();
             }
         }
-        if (! in_array('id', $fields)) {
+        if (!in_array('id', $fields)) {
             array_unshift($fields, 'id');
         }
         $fields = array_merge($fields, $this->extraFields);
@@ -306,20 +306,32 @@ class Table
         return $this->model->query();
     }
 
+    public function getSearchableFields(): array
+    {
+        $fields = [];
+        foreach ($this->schema as $field) {
+            if ($field->isSearchable()) {
+                $fields[] = $field->getName();
+            }
+        }
+
+        return $fields;
+    }
+
     public function executeQuery(): self
     {
         $this->data = $this->query()
-            ->when(! empty($this->q), function ($query) {
-                foreach ($this->getSchema() as $field) {
-                    if ($field->isSearchable()) {
-                        $query->orWhere($field->getName(), 'like', '%'.$this->q.'%');
+            ->when(!empty($this->q) and count($this->getSearchableFields())>0, function ($query) {
+                return $query->where(function ($query) {
+                    foreach ($this->getSearchableFields() as $field) {
+                        $query->orWhere($field, 'like', '%' . $this->q . '%');
                     }
-                }
+                });
             })
-            ->when(! empty($this->relations), function ($query) {
+            ->when(!empty($this->relations), function ($query) {
                 $query->with($this->relations);
             })
-            ->when(! empty($this->currentFilter) and $this->currentFilter !== 'all', function ($query) {
+            ->when(!empty($this->currentFilter) and $this->currentFilter !== 'all', function ($query) {
                 $query->where($this->filters[$this->currentFilter]['filter']);
             })
             ->select($this->fields())
@@ -350,7 +362,7 @@ class Table
 
     public function search($q): self
     {
-        if (! empty($q)) {
+        if (!empty($q)) {
             $this->q = $q;
         }
 

@@ -9,10 +9,11 @@ use Pardalsalcap\Hailo\Forms\Traits\HasPlaceholder;
 use Pardalsalcap\Hailo\Forms\Traits\HasRelation;
 use Pardalsalcap\Hailo\Forms\Traits\HasType;
 use Pardalsalcap\Hailo\Forms\Traits\HasValidationRules;
+use Pardalsalcap\Hailo\Forms\Traits\RefreshOnBlur;
 
 class SelectInput implements FormField
 {
-    use HasDefault, HasLabel, HasOptions, HasPlaceholder, HasRelation, HasType, HasValidationRules;
+    use HasDefault, HasLabel, HasOptions, HasPlaceholder, HasRelation, HasType, HasValidationRules, RefreshOnBlur;
 
     protected string $name = '';
 

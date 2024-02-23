@@ -26,8 +26,11 @@ trait HasTables
         return $this->getTable($name);
     }
 
-    public function getTable($name): Table
+    public function getTable($name): Table|null
     {
+        if (!isset($this->tables[$name])) {
+            return null;
+        }
         return $this->tables[$name];
     }
 

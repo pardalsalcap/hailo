@@ -7,5 +7,6 @@ return [
     'maintenance' => 'Mantenimiento',
     'redirections' => 'Redirecciones',
     'medias' => 'Multimedia',
+    'contents' => 'Contenido',
 
 ];

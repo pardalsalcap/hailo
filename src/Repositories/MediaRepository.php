@@ -57,7 +57,7 @@ class MediaRepository
     {
         return Table::make('media_table', $media)
             ->title(__('hailo::medias.table_title'))
-            ->perPage(25)
+            ->perPage(1)
             ->hasEditAction(true)
             ->hasDeleteAction(true)
             ->extraField('is_image')
@@ -69,6 +69,12 @@ class MediaRepository
             ->extraField('alt')
             ->extraField('versions')
             ->card('media-card')
+            ->addFilter('images_only', function ($query) {
+                return $query->where('is_image', true);
+            }, __('hailo::medias.filter_image_only'))
+            ->addFilter('downloads_only', function ($query) {
+                return $query->where('is_image', false);
+            }, __('hailo::medias.filter_downloads_only'))
             ->noRecordsFound(__('hailo::medias.no_records_found'))
             ->schema([
                 MediaColumn::make('original')

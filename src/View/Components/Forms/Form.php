@@ -12,7 +12,7 @@ class Form extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(public \Pardalsalcap\Hailo\Forms\Form $form, public $validation = null)
+    public function __construct(public \Pardalsalcap\Hailo\Forms\Form $form, public $validation = null, public array $data = [])
     {
         if (! is_null($this->validation)) {
             $this->validation = new MessageBag($this->validation);
@@ -24,6 +24,6 @@ class Form extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('hailo::components.forms.form', ['form' => $this->form]);
+        return view('hailo::components.forms.form', ['form' => $this->form, "data" => $this->data, "validation" => $this->validation]);
     }
 }

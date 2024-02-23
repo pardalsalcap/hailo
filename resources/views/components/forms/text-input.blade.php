@@ -1,6 +1,4 @@
 <div class="mb-4">
-
-
     @if ($input->isTranslatable())
         <h2>
             {{ $input->getLabel() }}
@@ -10,7 +8,8 @@
         @endif
         @foreach(config('hailo.languages') as $iso=>$language)
             <div class="mt-2">
-                <label for="{{ $input->getName() }}_{{ $iso }}" class="block text-sm font-medium leading-6 text-gray-400">
+                <label for="{{ $input->getName() }}_{{ $iso }}"
+                       class="block text-sm font-medium leading-6 text-gray-400">
                     {{ $input->getLabel() }} ({{ $language }})
                 </label>
                 <input
@@ -28,11 +27,16 @@
         <div class="mt-2">
             <x-hailo::forms.label :input="$input"/>
             <input
-                wire:model="formData.{{ $form->getName() }}.{{ $input->getName() }}"
+                @if ($input->hasBlur())
+                    wire:model.blur="formData.{{ $form->getName() }}.{{ $input->getName() }}"
+                @else
+                    wire:model="formData.{{ $form->getName() }}.{{ $input->getName() }}"
+                @endif
                 id="{{ $input->getName() }}"
                 name="{{ $input->getName() }}"
                 type="{{ $input->getType() }}"
-                value="{{ $input->getValue() }}"
+                value="{{ $data[$input->getName()]??'' }}"
+                @if ($input->isReadOnly()) readonly @endif
                 autocomplete="{{ $input->getName() }}"
                 @if (in_array('required', $input->getRules($form))) requiredo @endif
                 @if (!empty($input->getPlaceholder())) placeholder="{{ $input->getPlaceholder() }}" @endif

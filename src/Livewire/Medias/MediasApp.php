@@ -41,6 +41,8 @@ class MediasApp extends Component
         'sort_by' => ['except' => 'id', 'as' => 'sort_by'],
         'sort_direction' => ['except' => ['ASC', 'null'], 'as' => 'sort_direction'],
         'q' => ['except' => ''],
+        'register_id'=> ['except' => [null, 'null']],
+        'action' => ['except' => 'index'],
     ];
 
     public function mount(): void

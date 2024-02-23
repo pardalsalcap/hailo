@@ -21,6 +21,16 @@ class NavigationRepository
                     ->children([])
                     ->id('dashboard')
                     ->livewire(true),
+                NavigationItem::make('contents')
+                    ->label(__('hailo::navigation.contents'))
+                    ->icon('contents')
+                    ->route(route('hailo.contents'))
+                    ->active(function () {
+                        return request()->routeIs('hailo.contents');
+                    })
+                    ->children([])
+                    ->id('contents')
+                    ->livewire(true),
                 NavigationItem::make('medias')
                     ->label(__('hailo::navigation.medias'))
                     ->icon('medias')
